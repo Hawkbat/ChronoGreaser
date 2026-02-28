@@ -76,6 +76,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Emergency reset if player falls out of the world
+        if (transform.position.y < -100f)
+        {
+            transform.position = Vector3.up * 0.1f;
+        }
+
         if (!TimeLoop.IsPlaying && interactTarget != null)
         {
             interactTarget.EndInteraction(lastInteractPos);

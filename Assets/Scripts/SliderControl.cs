@@ -15,6 +15,12 @@ public class SliderControl : MonoBehaviour, IInteractable
     Snapshot currentSnapshot;
     Stack<Snapshot> snapshots = new();
 
+    public float Value
+    {
+        get => value;
+        set => this.value = Mathf.Clamp(value, minValue, maxValue);
+    }
+
     public bool Locked
     {
         get => locked;

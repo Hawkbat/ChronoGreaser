@@ -12,6 +12,12 @@ public class ButtonControl : MonoBehaviour, IInteractable
     PressData currentPress;
     Stack<PressData> pressHistory = new();
 
+    public bool Pressed
+    {
+        get => pressed;
+        set => pressed = value;
+    }
+
     public bool Locked
     {
         get => locked;

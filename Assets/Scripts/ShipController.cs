@@ -39,6 +39,10 @@ public class ShipController : MonoBehaviour
                 currentTravel = travelHistory.Peek();
             }
             transform.localPosition = currentTravel.GetPosition(TimeLoop.CurrentTime);
+            if (currentTravel.IsActive(TimeLoop.CurrentTime))
+            {
+                transform.localRotation = Quaternion.LookRotation((currentTravel.end - currentTravel.start).normalized, Vector3.up);
+            }
             if (currentTravel.IsActive(TimeLoop.CurrentTime) && currentTravel.source != null && currentTravel.source.IsBlackHole)
             {
                 TimeLoop.SetTimeScaleMultiplier(blackHoleTimeScaleCurve.Evaluate(currentTravel.GetProgress(TimeLoop.CurrentTime)));
@@ -78,6 +82,11 @@ public class ShipController : MonoBehaviour
     public Travel GetActiveTravel() => IsTraveling() ? travelHistory.Peek() : default;
 
     public IEnumerable<Travel> GetTravelHistory() => travelHistory;
+
+    public void SetRotation(Vector3 angles)
+    {
+        transform.localRotation = Quaternion.Euler(angles);
+    }
 
     public void InterruptTravel()
     {
@@ -139,7 +148,7 @@ public class ShipController : MonoBehaviour
         {
             if (time <= startTime) return 0f;
             if (time >= endTime) return 1f;
-            float t = Mathf.InverseLerp(startTime, endTime, time);
+            float t = Mathf.Clamp01(Mathf.InverseLerp(startTime, endTime, time));
             return Bias(t, bias);
         }
 

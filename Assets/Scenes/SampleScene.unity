@@ -376,9 +376,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c6144853cda04990447dc20238d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarMapControlsController
+  starMap: {fileID: 550456086}
   ship: {fileID: 8807437128211153641}
+  shipTravel: {fileID: 709454064}
+  mapRotationTrackball: {fileID: 1090666807}
   brakeButton: {fileID: 1067532535}
   confirmButton: {fileID: 745365630}
+  distanceSlider: {fileID: 1098302437}
+  shipXSlider: {fileID: 1061459889}
+  shipYSlider: {fileID: 1357836764}
 --- !u!1001 &187537826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -818,6 +824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StarMapController
   radius: 3
   pan: {x: 0, y: 0, z: 0}
+  rotate: {x: 0, y: 0, z: 0}
   pivot: {fileID: 635600814}
   ship: {fileID: 0}
 --- !u!1 &608223941
@@ -1387,8 +1394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4f1428a38cb5948a5a25c92e314d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SliderControl
-  value: 0
-  minValue: 0
+  value: 0.01
+  minValue: 0.01
   maxValue: 3
   handle: {fileID: 94566413}
   minTransform: {fileID: 94566412}
@@ -1934,7 +1941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipController
   shipVisual: {fileID: 4629603274025166103}
-  travelSpeed: 5
+  travelSpeed: 0.2
   travelBias: 0.5
   blackHoleSpeed: 2
   blackHoleBias: 0.8

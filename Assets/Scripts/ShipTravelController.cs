@@ -64,6 +64,11 @@ public class ShipTravelController : MonoBehaviour
         }
     }
 
+    public void SetDistance(float newDistance)
+    {
+        travelDistance = newDistance;
+    }
+
     public void InitiateTravel()
     {
         ship.TravelTo(GetTravelEnd(), ship.GetTravelSpeed(), 0.5f, null);

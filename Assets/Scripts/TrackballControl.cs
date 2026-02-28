@@ -12,6 +12,12 @@ public class TrackballControl : MonoBehaviour, IInteractable
     Snapshot currentSnapshot;
     Stack<Snapshot> snapshots = new();
 
+    public Vector2 Value
+    {
+        get => value;
+        set => this.value = value;
+    }
+
     public bool Locked
     {
         get => locked;
