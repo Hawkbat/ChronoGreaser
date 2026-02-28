@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1128658715978321078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6927675043571681669}
+  - component: {fileID: 3093182129627276757}
+  - component: {fileID: 7979439942975125482}
+  m_Layer: 0
+  m_Name: Globals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6927675043571681669
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128658715978321078}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3093182129627276757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128658715978321078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14200b60d7f9817438ede298d86c8ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioController
+  mixer: {fileID: 24100000, guid: 0873a38142611644393b3c7c7d721588, type: 2}
+  masterGroup: {fileID: 24300002, guid: 0873a38142611644393b3c7c7d721588, type: 2}
+  musicGroup: {fileID: 1016041555423751996, guid: 0873a38142611644393b3c7c7d721588, type: 2}
+  soundsGroup: {fileID: -2801691786577599239, guid: 0873a38142611644393b3c7c7d721588, type: 2}
+--- !u!114 &7979439942975125482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128658715978321078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b0676b43069289438406c6d96beab9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TimeLoop
+  totalDuration: 120
+  timeScale: 1
+  timeScaleMultiplier: 1
+  rewindSpeed: 5
+  fastForwardSpeed: 5
+  OnStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResetting:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReset:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRewinding:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRewound:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFastForwarding:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFastForwarded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResume:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTimeScaleChanged:
+    m_PersistentCalls:
+      m_Calls: []

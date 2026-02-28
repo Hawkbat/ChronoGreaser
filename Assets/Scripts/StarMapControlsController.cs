@@ -20,7 +20,7 @@ public class StarMapControlsController : MonoBehaviour
         brakeButton.Locked = !ship.IsTraveling();
         if (brakeButton.Pressed)
         {
-            ship.InterruptTravel();
+            ship.InterruptTravel(false);
         }
         confirmButton.Locked = ship.IsTraveling();
         if (confirmButton.Pressed)
@@ -33,7 +33,7 @@ public class StarMapControlsController : MonoBehaviour
         shipYSlider.Locked = ship.IsTraveling();
         if (!ship.IsTraveling())
         {
-            var shipRotationAngles = new Vector3(shipXSlider.Value * 180f, shipYSlider.Value * 180f, 0f);
+            var shipRotationAngles = new Vector3(shipYSlider.Value * 180f, shipXSlider.Value * 180f, 0f);
             ship.SetRotation(shipRotationAngles);
         }
     }

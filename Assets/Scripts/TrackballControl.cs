@@ -8,6 +8,8 @@ public class TrackballControl : MonoBehaviour, IInteractable
     [SerializeField] Transform ball;
     [SerializeField] float snapshotDebounceTime = 0.1f;
     [SerializeField] bool locked;
+    [SerializeField] SoundController pressSound;
+    [SerializeField] SoundController releaseSound;
 
     Snapshot currentSnapshot;
     Stack<Snapshot> snapshots = new();
@@ -40,16 +42,16 @@ public class TrackballControl : MonoBehaviour, IInteractable
     {
         if (TimeLoop.IsRewinding)
         {
-            if (snapshots.Count > 0)
+            if (snapshots.Count > 1)
             {
                 var prev = snapshots.Peek();
-                while (prev.time > currentSnapshot.time)
+                while (snapshots.Count > 1 && prev.time > currentSnapshot.time)
                 {
                     ApplySnapshot(prev);
                     currentSnapshot = prev;
                     snapshots.Pop();
                 }
-                if (snapshots.Count > 0)
+                if (snapshots.Count > 1)
                 {
                     prev = snapshots.Peek();
                     BlendSnapshots(prev, currentSnapshot, TimeLoop.CurrentTime);
@@ -62,7 +64,7 @@ public class TrackballControl : MonoBehaviour, IInteractable
         }
         else
         {
-            while (snapshots.Count > 0 && snapshots.Peek().time > TimeLoop.CurrentTime)
+            while (snapshots.Count > 1 && snapshots.Peek().time > TimeLoop.CurrentTime)
             {
                 snapshots.Pop();
             }
@@ -85,7 +87,7 @@ public class TrackballControl : MonoBehaviour, IInteractable
 
     public void StartInteraction(Vector3 worldPos)
     {
-
+        if (pressSound != null) pressSound.Play();
     }
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
@@ -95,7 +97,7 @@ public class TrackballControl : MonoBehaviour, IInteractable
 
     public void EndInteraction(Vector3 worldPos)
     {
-
+        if (releaseSound != null) releaseSound.Play();
     }
 
     void ApplySnapshot(Snapshot snapshot)

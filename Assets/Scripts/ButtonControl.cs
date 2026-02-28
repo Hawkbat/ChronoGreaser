@@ -8,6 +8,8 @@ public class ButtonControl : MonoBehaviour, IInteractable
     [SerializeField] Transform pressedTransform;
     [SerializeField] Transform releasedTransform;
     [SerializeField] bool locked;
+    [SerializeField] SoundController pressSound;
+    [SerializeField] SoundController releaseSound;
 
     PressData currentPress;
     Stack<PressData> pressHistory = new();
@@ -41,10 +43,10 @@ public class ButtonControl : MonoBehaviour, IInteractable
     {
         if (TimeLoop.IsRewinding)
         {
-            if (pressHistory.Count > 0)
+            if (pressHistory.Count > 1)
             {
                 var prev = pressHistory.Peek();
-                while (prev.pressTime > currentPress.pressTime)
+                while (pressHistory.Count > 0 && prev.pressTime > TimeLoop.CurrentTime)
                 {
                     currentPress = prev;
                     pressHistory.Pop();
@@ -53,11 +55,12 @@ public class ButtonControl : MonoBehaviour, IInteractable
         }
         else
         {
-            while (pressHistory.Count > 0 && pressHistory.Peek().pressTime > TimeLoop.CurrentTime)
+            while (pressHistory.Count > 1 && pressHistory.Peek().pressTime > TimeLoop.CurrentTime)
             {
                 pressHistory.Pop();
             }
         }
+
         pressed = currentPress.IsPressed;
         button.position = Vector3.Lerp(releasedTransform.position, pressedTransform.position, pressed ? 1f : 0f);
     }
@@ -72,6 +75,7 @@ public class ButtonControl : MonoBehaviour, IInteractable
             pressTime = TimeLoop.CurrentTime,
             releaseTime = float.MaxValue
         };
+        if (pressSound != null) pressSound.Play();
     }
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
@@ -83,6 +87,7 @@ public class ButtonControl : MonoBehaviour, IInteractable
     {
         currentPress.releaseTime = TimeLoop.CurrentTime;
         pressHistory.Push(currentPress);
+        if (releaseSound != null) releaseSound.Play();
     }
 
     struct PressData

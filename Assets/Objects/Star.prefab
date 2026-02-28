@@ -590,8 +590,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574721b31369ec441b1665d4a9931e9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarController
-  radius: 0.2
-  radiusKnown: 0
+  radius: 0.5
+  radiusKnown: 1
   lifeRimColorCurve:
     serializedVersion: 2
     key0: {r: 1, g: 0.7490196, b: 0, a: 1}

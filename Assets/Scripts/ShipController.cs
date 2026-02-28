@@ -6,7 +6,6 @@ public class ShipController : MonoBehaviour
 {
     [SerializeField] ShipVisual shipVisual;
     [SerializeField] float travelSpeed = 5f;
-    [SerializeField] float travelBias = 0.5f;
     [SerializeField] float blackHoleSpeed = 2f;
     [SerializeField] float blackHoleBias = 0.8f;
     [SerializeField] AnimationCurve blackHoleTimeScaleCurve;
@@ -32,7 +31,7 @@ public class ShipController : MonoBehaviour
         if (travelHistory.Count > 0)
         {
             var currentTravel = travelHistory.Peek();
-            while (currentTravel.IsPast(TimeLoop.CurrentTime))
+            while (currentTravel.IsFuture(TimeLoop.CurrentTime))
             {
                 travelHistory.Pop();
                 if (travelHistory.Count == 0) break;
@@ -88,21 +87,27 @@ public class ShipController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(angles);
     }
 
-    public void InterruptTravel()
+    public bool InterruptTravel(bool overrideNaturalTravel)
     {
-        if (travelHistory.Count > 0 && TimeLoop.CurrentTime < travelHistory.Peek().endTime)
+        if (travelHistory.Count == 0)
+        {
+            return true;
+        } else if (travelHistory.Count > 0 && TimeLoop.CurrentTime < travelHistory.Peek().endTime && (travelHistory.Peek().source == null || overrideNaturalTravel))
         {
             var lastTravel = travelHistory.Pop();
             lastTravel.end = lastTravel.GetPosition(TimeLoop.CurrentTime);
             lastTravel.endTime = TimeLoop.CurrentTime;
             travelHistory.Push(lastTravel);
             transform.localPosition = lastTravel.GetPosition(TimeLoop.CurrentTime);
+            return true;
         }
+        return false;
     }
 
-    public void TravelTo(Vector3 destination, float speed, float bias, StarController source = null)
+    public bool TravelTo(Vector3 destination, float speed, float bias, StarController source = null)
     {
-        InterruptTravel();
+        var canOverrideNaturalTravel = source != null && source.IsBlackHole;
+        if (!InterruptTravel(canOverrideNaturalTravel)) return false;
         float distance = Vector3.Distance(transform.localPosition, destination);
         float duration = distance / speed;
         var travel = new Travel(
@@ -115,6 +120,7 @@ public class ShipController : MonoBehaviour
             source: source
         );
         travelHistory.Push(travel);
+        return true;
     }
 
     public struct Travel

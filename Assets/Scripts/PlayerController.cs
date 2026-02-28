@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     float cameraAngleX;
     Stack<Snapshot> history;
     Snapshot currentSnapshot;
-    Snapshot initialSnapshot;
     IInteractable interactTarget;
     Vector3 lastInteractPos;
     IInteractable hoverTarget;
@@ -34,7 +33,6 @@ public class PlayerController : MonoBehaviour
         history = new();
 
         UpdateCurrentSnapshot();
-        initialSnapshot = currentSnapshot;
 
         lookAction = InputSystem.actions.FindAction("Look");
         moveAction = InputSystem.actions.FindAction("Move");
@@ -47,7 +45,6 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         var timeLoop = TimeLoop.GetInstance();
-        timeLoop.OnReset.AddListener(OnTimeLoopReset);
         timeLoop.OnRewinding.AddListener(OnTimeLoopRewinding);
         timeLoop.OnFastForwarded.AddListener(OnTimeLoopFastForwarded);
     }
@@ -59,7 +56,6 @@ public class PlayerController : MonoBehaviour
         var timeLoop = TimeLoop.GetInstance();
         if (timeLoop != null)
         {
-            timeLoop.OnReset.RemoveListener(OnTimeLoopReset);
             timeLoop.OnRewinding.RemoveListener(OnTimeLoopRewinding);
             timeLoop.OnFastForwarded.RemoveListener(OnTimeLoopFastForwarded);
         }
@@ -224,14 +220,6 @@ public class PlayerController : MonoBehaviour
         transform.position = snapshot.Position;
         transform.rotation = Quaternion.Euler(0f, snapshot.angleY, 0f);
         cam.transform.localRotation = Quaternion.Euler(snapshot.cameraAngleX, 0f, 0f);
-    }
-
-    void OnTimeLoopReset()
-    {
-        history.Clear();
-        ApplySnapshot(initialSnapshot);
-        UpdateCurrentSnapshot();
-        RecordSnapshot();
     }
 
     void OnTimeLoopRewinding()

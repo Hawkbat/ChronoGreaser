@@ -11,6 +11,8 @@ public class SliderControl : MonoBehaviour, IInteractable
     [SerializeField] Transform maxTransform;
     [SerializeField] float snapshotDebounceTime = 0.1f;
     [SerializeField] bool locked;
+    [SerializeField] SoundController pressSound;
+    [SerializeField] SoundController releaseSound;
 
     Snapshot currentSnapshot;
     Stack<Snapshot> snapshots = new();
@@ -43,16 +45,16 @@ public class SliderControl : MonoBehaviour, IInteractable
     {
         if (TimeLoop.IsRewinding)
         {
-            if (snapshots.Count > 0)
+            if (snapshots.Count > 1)
             {
                 var prev = snapshots.Peek();
-                while (prev.time > currentSnapshot.time)
+                while (snapshots.Count > 1 && prev.time > TimeLoop.CurrentTime)
                 {
                     ApplySnapshot(prev);
                     currentSnapshot = prev;
                     snapshots.Pop();
                 }
-                if (snapshots.Count > 0)
+                if (snapshots.Count > 1)
                 {
                     prev = snapshots.Peek();
                     BlendSnapshots(prev, currentSnapshot, TimeLoop.CurrentTime);
@@ -65,7 +67,7 @@ public class SliderControl : MonoBehaviour, IInteractable
         }
         else
         {
-            while (snapshots.Count > 0 && snapshots.Peek().time > TimeLoop.CurrentTime)
+            while (snapshots.Count > 1 && snapshots.Peek().time > TimeLoop.CurrentTime)
             {
                 snapshots.Pop();
             }
@@ -73,7 +75,7 @@ public class SliderControl : MonoBehaviour, IInteractable
             currentSnapshot.time = TimeLoop.CurrentTime;
             currentSnapshot.value = value;
             var hasChanged = snapshots.Count == 0 || currentSnapshot.value != snapshots.Peek().value;
-            var debounceTimePassed = currentSnapshot.time - snapshots.Peek().time >= snapshotDebounceTime;
+            var debounceTimePassed = snapshots.Count == 0 || currentSnapshot.time - snapshots.Peek().time >= snapshotDebounceTime;
             if (hasChanged && debounceTimePassed)
             {
                 snapshots.Push(currentSnapshot);
@@ -89,7 +91,7 @@ public class SliderControl : MonoBehaviour, IInteractable
 
     public void StartInteraction(Vector3 worldPos)
     {
-
+        if (pressSound != null) pressSound.Play();
     }
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
@@ -103,7 +105,7 @@ public class SliderControl : MonoBehaviour, IInteractable
 
     public void EndInteraction(Vector3 worldPos)
     {
-
+        if (releaseSound != null) releaseSound.Play();
     }
 
     void ApplySnapshot(Snapshot snapshot)

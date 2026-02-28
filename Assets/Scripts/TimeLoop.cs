@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class TimeLoop : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class TimeLoop : MonoBehaviour
     [SerializeField] float fastForwardSpeed = 20f;
 
     float elapsedTime = 0f;
+    float targetTime = 0f;
     bool isStopped = false;
     bool isResetting = false;
     bool isRewinding = false;
@@ -30,8 +32,18 @@ public class TimeLoop : MonoBehaviour
     public UnityEvent<float> OnTimeScaleChanged = new();
 
     public static float CurrentTime => instance != null ? instance.elapsedTime : 0f;
-    public static float TimeScale => instance != null ? instance.timeScale * instance.timeScaleMultiplier : 1f;
-    public static float DeltaTime => instance != null ? Time.deltaTime * instance.timeScale * instance.timeScaleMultiplier : Time.deltaTime;
+    public static float TimeScale
+    {
+        get
+        {
+            if (instance == null) return 1f;
+            if (IsStopped) return 0f;
+            if (IsRewinding) return -instance.rewindSpeed;
+            if (IsFastForwarding) return instance.fastForwardSpeed;
+            return instance.timeScale * instance.timeScaleMultiplier;
+        }
+    }
+    public static float DeltaTime => instance != null ? Time.deltaTime * TimeScale : Time.deltaTime;
     public static float TotalDuration => instance != null ? instance.totalDuration : 0f;
     public static float NormalizedTime => instance != null ? Mathf.Clamp01(instance.elapsedTime / instance.totalDuration) : 0f;
     public static bool IsStopped => instance != null ? instance.isStopped : false;
@@ -95,7 +107,26 @@ public class TimeLoop : MonoBehaviour
 
     void Update()
     {
-        elapsedTime = Mathf.Clamp(elapsedTime + Time.deltaTime * timeScale * timeScaleMultiplier, 0f, totalDuration);
+        if (IsFastForwarding)
+        {
+            elapsedTime = Mathf.MoveTowards(elapsedTime, targetTime, DeltaTime);
+            if (elapsedTime == targetTime)
+            {
+                EndFastForward();
+            }
+        }
+        else if (IsRewinding)
+        {
+            elapsedTime = Mathf.MoveTowards(elapsedTime, targetTime, -DeltaTime);
+            if (elapsedTime == targetTime)
+            {
+                EndRewind();
+            }
+        }
+        else
+        {
+            elapsedTime = Mathf.Clamp(elapsedTime + DeltaTime, 0f, totalDuration);
+        }
         if (timeScale > 0f && elapsedTime == totalDuration && !isResetting)
         {
             ResetTimeLoop();
@@ -111,6 +142,10 @@ public class TimeLoop : MonoBehaviour
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
             RewindToTime(0f);
+        }
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            FastForwardToTime(totalDuration - 10f);
         }
     }
 
@@ -151,7 +186,12 @@ public class TimeLoop : MonoBehaviour
 
     IEnumerator DoStoppedTimeLoopEnding()
     {
+        AudioController.GetInstance().SetMasterVolumeMultiplier(0f);
         yield return new WaitForSeconds(5f);
+        AudioController.GetInstance().SetMasterVolumeMultiplier(1f);
+        Save.Instance.didTimeStopEnding = true;
+        Save.SaveFile();
+        SceneManager.LoadScene("Startup");
     }
 
     void ResetTimeLoop()
@@ -165,9 +205,9 @@ public class TimeLoop : MonoBehaviour
     IEnumerator DoResetTimeLoop()
     {
         yield return new WaitForSeconds(1f);
-        elapsedTime = 0f;
         isResetting = false;
         OnReset.Invoke();
+        RewindToTime(0f);
     }
 
     void ResumeTimeLoop()
@@ -182,23 +222,14 @@ public class TimeLoop : MonoBehaviour
     void RewindToTime(float targetTime)
     {
         if (isRewinding) return;
+        ResumeTimeLoop();
+        this.targetTime = targetTime;
         isRewinding = true;
         OnRewinding.Invoke();
-        StartCoroutine(DoRewindToTime(targetTime));
     }
 
-    IEnumerator DoRewindToTime(float targetTime)
+    void EndRewind()
     {
-        float startTime = elapsedTime;
-        float duration = Mathf.Abs(targetTime - startTime) / rewindSpeed;
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            elapsedTime = Mathf.Lerp(startTime, targetTime, elapsed / duration);
-            yield return null;
-        }
-        elapsedTime = targetTime;
         isRewinding = false;
         OnRewound.Invoke();
         ResumeTimeLoop();
@@ -207,23 +238,14 @@ public class TimeLoop : MonoBehaviour
     void FastForwardToTime(float targetTime)
     {
         if (isFastForwarding) return;
+        ResumeTimeLoop();
+        this.targetTime = targetTime;
         isFastForwarding = true;
         OnFastForwarding.Invoke();
-        StartCoroutine(DoFastForwardToTime(targetTime));
     }
 
-    IEnumerator DoFastForwardToTime(float targetTime)
+    void EndFastForward()
     {
-        float startTime = elapsedTime;
-        float duration = Mathf.Abs(targetTime - startTime) / fastForwardSpeed;
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            elapsedTime = Mathf.Lerp(startTime, targetTime, elapsed / duration);
-            yield return null;
-        }
-        elapsedTime = targetTime;
         isFastForwarding = false;
         OnFastForwarded.Invoke();
         ResumeTimeLoop();

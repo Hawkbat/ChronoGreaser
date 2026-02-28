@@ -39,7 +39,7 @@ public class ShipTravelController : MonoBehaviour
         });
 
         travelsToReview.Clear();
-        travelsToReview.AddRange(ship.GetTravelHistory());
+        travelsToReview.AddRange(ship.GetTravelHistory().Where(t => t.source == null));
 
         foreach (var activeLine in activeLines)
         {
