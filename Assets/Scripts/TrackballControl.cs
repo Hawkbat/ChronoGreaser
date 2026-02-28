@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SliderControl : MonoBehaviour, IInteractable
+public class TrackballControl : MonoBehaviour, IInteractable
 {
-    [SerializeField] float value;
-    [SerializeField] float minValue = 0f;
-    [SerializeField] float maxValue = 1f;
-    [SerializeField] Transform handle;
-    [SerializeField] Transform minTransform;
-    [SerializeField] Transform maxTransform;
+    [SerializeField] Vector2 value;
+    [SerializeField] Vector2 rotationScale;
+    [SerializeField] Transform ball;
     [SerializeField] float snapshotDebounceTime = 0.1f;
     [SerializeField] bool locked;
 
@@ -30,7 +27,7 @@ public class SliderControl : MonoBehaviour, IInteractable
         };
         snapshots = new();
         snapshots.Push(currentSnapshot);
-        InteractableProxy.Make(handle.gameObject, this);
+        InteractableProxy.Make(ball.gameObject, this);
     }
 
     void Update()
@@ -74,12 +71,11 @@ public class SliderControl : MonoBehaviour, IInteractable
             }
         }
 
-        var t = Mathf.InverseLerp(minValue, maxValue, value);
-        handle.position = Vector3.Lerp(minTransform.position, maxTransform.position, t);
+        ball.localRotation = Quaternion.Euler(value.x * rotationScale.x, value.y * rotationScale.y, 0f);
     }
 
     public bool AllowInteraction() => TimeLoop.IsPlaying && !locked;
-    public bool InteractionLocksCamera() => false;
+    public bool InteractionLocksCamera() => true;
 
     public void StartInteraction(Vector3 worldPos)
     {
@@ -88,11 +84,7 @@ public class SliderControl : MonoBehaviour, IInteractable
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
     {
-        var minToMax = maxTransform.position - minTransform.position;
-        var minToHandle = worldPos - minTransform.position;
-        var projectedLength = Vector3.Dot(minToHandle, minToMax.normalized);
-        var t = Mathf.Clamp01(projectedLength / minToMax.magnitude);
-        value = Mathf.Lerp(minValue, maxValue, t);
+        value += moveDelta;
     }
 
     public void EndInteraction(Vector3 worldPos)
@@ -108,12 +100,12 @@ public class SliderControl : MonoBehaviour, IInteractable
     void BlendSnapshots(Snapshot from, Snapshot to, float time)
     {
         var t = Mathf.InverseLerp(from.time, to.time, time);
-        value = Mathf.Lerp(from.value, to.value, t);
+        value = Vector2.Lerp(from.value, to.value, t);
     }
 
     struct Snapshot
     {
         public float time;
-        public float value;
+        public Vector2 value;
     }
 }

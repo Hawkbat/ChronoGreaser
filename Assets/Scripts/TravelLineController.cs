@@ -9,6 +9,7 @@ public class TravelLineController : MonoBehaviour
     [SerializeField] CursorVisual endVisual;
     [SerializeField] LineVisual lineVisual;
 
+    StarMapController starMap;
     ShipController.Travel travel;
 
     public void SetTravel(ShipController.Travel newTravel)
@@ -25,11 +26,21 @@ public class TravelLineController : MonoBehaviour
 
     private void Awake()
     {
+        starMap = GetComponentInParent<StarMapController>();
         travel = new();
     }
 
     void Update()
     {
+        var visibilityPosition = starMap ? starMap.transform.position : transform.position;
+        var visibilityRadius = starMap ? starMap.radius : 8f;
+        startVisual.visibilityPosition = visibilityPosition;
+        startVisual.visibilityRadius = visibilityRadius;
+        endVisual.visibilityPosition = visibilityPosition;
+        endVisual.visibilityRadius = visibilityRadius;
+        lineVisual.visibilityPosition = visibilityPosition;
+        lineVisual.visibilityRadius = visibilityRadius;
+
         if (travel.IsInitialized && !travel.IsFuture(TimeLoop.CurrentTime))
         {
             startVisual.enabled = true;

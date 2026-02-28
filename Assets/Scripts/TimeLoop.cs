@@ -31,12 +31,14 @@ public class TimeLoop : MonoBehaviour
 
     public static float CurrentTime => instance != null ? instance.elapsedTime : 0f;
     public static float TimeScale => instance != null ? instance.timeScale * instance.timeScaleMultiplier : 1f;
+    public static float DeltaTime => instance != null ? Time.deltaTime * instance.timeScale * instance.timeScaleMultiplier : Time.deltaTime;
     public static float TotalDuration => instance != null ? instance.totalDuration : 0f;
     public static float NormalizedTime => instance != null ? Mathf.Clamp01(instance.elapsedTime / instance.totalDuration) : 0f;
     public static bool IsStopped => instance != null ? instance.isStopped : false;
     public static bool IsResetting => instance != null ? instance.isResetting : false;
     public static bool IsRewinding => instance != null ? instance.isRewinding : false;
     public static bool IsFastForwarding => instance != null ? instance.isFastForwarding : false;
+    public static bool IsPlaying => instance != null ? !instance.isStopped && !instance.isResetting && !instance.isRewinding && !instance.isFastForwarding : false;
 
     public static void SetTargetTime(float targetTime)
     {

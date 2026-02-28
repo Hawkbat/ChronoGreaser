@@ -1,15 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonControl : MonoBehaviour, IClickable
+public class ButtonControl : MonoBehaviour, IInteractable
 {
     [SerializeField] bool pressed;
     [SerializeField] Transform button;
     [SerializeField] Transform pressedTransform;
     [SerializeField] Transform releasedTransform;
+    [SerializeField] bool locked;
 
     PressData currentPress;
     Stack<PressData> pressHistory = new();
+
+    public bool Locked
+    {
+        get => locked;
+        set => locked = value;
+    }
 
     void Awake()
     {
@@ -21,6 +28,7 @@ public class ButtonControl : MonoBehaviour, IClickable
         };
         pressHistory = new();
         pressHistory.Push(currentPress);
+        InteractableProxy.Make(button.gameObject, this);
     }
 
     void Update()
@@ -48,12 +56,10 @@ public class ButtonControl : MonoBehaviour, IClickable
         button.position = Vector3.Lerp(releasedTransform.position, pressedTransform.position, pressed ? 1f : 0f);
     }
 
-    public void OnClick(Vector3 worldTarget)
-    {
+    public bool AllowInteraction() => TimeLoop.IsPlaying && !locked;
+    public bool InteractionLocksCamera() => false;
 
-    }
-
-    public void StartClicking()
+    public void StartInteraction(Vector3 worldPos)
     {
         currentPress = new PressData
         {
@@ -62,7 +68,12 @@ public class ButtonControl : MonoBehaviour, IClickable
         };
     }
 
-    public void EndClicking()
+    public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
+    {
+
+    }
+
+    public void EndInteraction(Vector3 worldPos)
     {
         currentPress.releaseTime = TimeLoop.CurrentTime;
         pressHistory.Push(currentPress);

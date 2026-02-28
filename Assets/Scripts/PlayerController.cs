@@ -1,19 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] Vector2 lookSpeed = new Vector2(90f, 90f);
     [SerializeField] float moveSpeed = 3f;
     [SerializeField] float snapshotRecordInterval = 0.1f;
+    [SerializeField] LayerMask interactableLayer;
+    [SerializeField] Image cursor;
+    [SerializeField] Color cursorDefaultColor;
+    [SerializeField] Color cursorHoverColor;
 
     InputAction lookAction;
     InputAction moveAction;
+    InputAction attackAction;
+    InputAction interactAction;
     float cameraAngleX;
     Stack<Snapshot> history;
     Snapshot currentSnapshot;
     Snapshot initialSnapshot;
+    IInteractable interactTarget;
+    Vector3 lastInteractPos;
+    IInteractable hoverTarget;
 
     CharacterController ctrl;
     Camera cam;
@@ -28,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
         lookAction = InputSystem.actions.FindAction("Look");
         moveAction = InputSystem.actions.FindAction("Move");
+        attackAction = InputSystem.actions.FindAction("Attack");
+        interactAction = InputSystem.actions.FindAction("Interact");
         InputSystem.actions.Enable();
 
         ctrl = GetComponent<CharacterController>();
@@ -58,10 +70,18 @@ public class PlayerController : MonoBehaviour
         GUILayout.Space(100f);
         GUILayout.Label("Snapshots: " + history.Count);
         GUILayout.Label("Estimated Memory Usage: " + history.Count * sizeof(float) * 6f / 1024f + " KB");
+        GUILayout.Label("Hover Target: " + (hoverTarget != null ? hoverTarget.ToString() : "None"));
+        GUILayout.Label("Interact Target: " + (interactTarget != null ? interactTarget.ToString() : "None"));
     }
 
     void Update()
     {
+        if (!TimeLoop.IsPlaying && interactTarget != null)
+        {
+            interactTarget.EndInteraction(lastInteractPos);
+            interactTarget = null;
+        }
+        cursor.enabled = TimeLoop.IsPlaying;
         if (TimeLoop.IsRewinding)
         {
             if (history.Count == 0)
@@ -70,7 +90,7 @@ public class PlayerController : MonoBehaviour
                 return;
             }
             var previous = history.Peek();
-            while (previous.time >= TimeLoop.CurrentTime)
+            while (history.Count > 0 && previous.time >= TimeLoop.CurrentTime)
             {
                 currentSnapshot = previous;
                 previous = history.Pop();
@@ -95,29 +115,76 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        var dt = TimeLoop.TimeScale * Time.deltaTime;
+        var dt = TimeLoop.DeltaTime;
 
         var moveInput = moveAction.ReadValue<Vector2>();
         var lookInput = lookAction.ReadValue<Vector2>();
 
         var adjustedLookSpeed = new Vector2(lookSpeed.x * Save.Instance.cameraSensitivityX, lookSpeed.y * Save.Instance.cameraSensitivityY);
 
-        transform.Rotate(Vector3.up, lookInput.x * dt * adjustedLookSpeed.x);
+        if (interactTarget == null || !interactTarget.InteractionLocksCamera())
+        {
+            transform.Rotate(Vector3.up, lookInput.x * dt * adjustedLookSpeed.x);
+            cameraAngleX -= lookInput.y * dt * adjustedLookSpeed.y;
+            cameraAngleX = Mathf.Clamp(cameraAngleX, -80f, 80f);
+            cam.transform.localRotation = Quaternion.Euler(cameraAngleX, 0f, 0f);
+        }
 
         var movement = transform.right * moveInput.x + transform.forward * moveInput.y;
         movement = moveSpeed * TimeLoop.TimeScale * Vector3.ClampMagnitude(movement, 1f);
         ctrl.SimpleMove(movement);
 
-        cameraAngleX -= lookInput.y * dt * adjustedLookSpeed.y;
-        cameraAngleX = Mathf.Clamp(cameraAngleX, -80f, 80f);
-        cam.transform.localRotation = Quaternion.Euler(cameraAngleX, 0f, 0f);
-
         UpdateCurrentSnapshot();
 
         if (history.Count == 0 || currentSnapshot.time - history.Peek().time >= snapshotRecordInterval)
-         {
-             RecordSnapshot();
+        {
+            RecordSnapshot();
         }
+
+        hoverTarget = null;
+        Vector3 hoverPos = Vector3.zero;
+        var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out var hitInfo, 10f, interactableLayer, QueryTriggerInteraction.Collide))
+        {
+
+            hoverTarget = hitInfo.collider.GetComponentInParent<IInteractable>();
+            hoverPos = hitInfo.point;
+        }
+        else
+        {
+            hoverTarget = null;
+            hoverPos = ray.GetPoint(10f);
+        }
+
+        if (interactTarget != null && !interactTarget.AllowInteraction())
+        {
+            interactTarget.EndInteraction(hoverPos);
+            interactTarget = null;
+        }
+
+        var interactPressed = attackAction.WasPressedThisFrame() || interactAction.WasPressedThisFrame();
+        var interactHeld = attackAction.IsPressed() || interactAction.IsPressed();
+        var interactReleased = attackAction.WasReleasedThisFrame() || interactAction.WasReleasedThisFrame();
+
+        if (interactPressed && interactTarget == null && hoverTarget != null && hoverTarget.AllowInteraction())
+        {
+            interactTarget = hoverTarget;
+            interactTarget.StartInteraction(hoverPos);
+            lastInteractPos = hoverPos;
+        }
+        if (interactHeld && interactTarget != null)
+        {
+            interactTarget.UpdateInteraction(hoverPos, lookInput);
+            lastInteractPos = hoverPos;
+        }
+        if (interactReleased && interactTarget != null)
+        {
+            interactTarget.EndInteraction(hoverPos);
+            interactTarget = null;
+        }
+
+        cursor.color = hoverTarget != null ? cursorHoverColor : cursorDefaultColor;
+        cursor.enabled = interactTarget == null;
     }
 
     void UpdateCurrentSnapshot()
