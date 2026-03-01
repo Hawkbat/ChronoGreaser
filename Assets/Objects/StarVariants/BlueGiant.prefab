@@ -84,7 +84,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
       propertyPath: deathTime
-      value: 75
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
       propertyPath: scanRadius
@@ -96,7 +96,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
       propertyPath: startDecayTime
-      value: 45
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
       propertyPath: lifeRimColorCurve.key0.b
