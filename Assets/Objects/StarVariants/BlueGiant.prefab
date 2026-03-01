@@ -80,7 +80,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
       propertyPath: cargoType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
       propertyPath: deathTime

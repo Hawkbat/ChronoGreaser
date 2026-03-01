@@ -8,9 +8,8 @@ public class ShipController : MonoBehaviour
     [SerializeField] float blackHoleSpeed = 2f;
     [SerializeField] float blackHoleBias = 0.8f;
     [SerializeField] AnimationCurve blackHoleTimeScaleCurve;
-    [SerializeField] float supernovaSpeed = 0.1f;
-    [SerializeField] float supernovaBias = 0.6f;
     [SerializeField] float supernovaKillDuration = 10f;
+    [SerializeField] ShipCargoController shipCargo;
 
     StarMapController starMap;
     Stack<Travel> travelHistory;
@@ -30,55 +29,56 @@ public class ShipController : MonoBehaviour
         shipVisual.visibilityPosition = visibilityPosition;
         shipVisual.visibilityRadius = visibilityRadius;
 
+        while (travelHistory.Count > 0 && travelHistory.Peek().IsFuture)
+        {
+            travelHistory.Pop();
+        }
         if (travelHistory.Count > 0)
         {
             var currentTravel = travelHistory.Peek();
-            while (currentTravel.IsFuture)
-            {
-                travelHistory.Pop();
-                if (travelHistory.Count == 0) break;
-                currentTravel = travelHistory.Peek();
-            }
-            transform.localPosition = currentTravel.GetPosition(TimeLoop.CurrentTime);
+            transform.localPosition = currentTravel.Position;
             if (currentTravel.IsActive)
             {
                 transform.localRotation = Quaternion.LookRotation((currentTravel.end - currentTravel.start).normalized, Vector3.up);
             }
-            if (currentTravel.IsActive && currentTravel.source != null && currentTravel.source.IsBlackHole)
+            if (!currentTravel.IsActive && currentTravel.source != null)
             {
-                TimeLoop.SetTimeScaleMultiplier(blackHoleTimeScaleCurve.Evaluate(currentTravel.GetProgress(TimeLoop.CurrentTime)));
+                // Death to dangerous star; rewind to start of loop
+                TimeLoop.Instance.RewindToTime(0f);
             }
-            else
-            {
-                TimeLoop.SetTimeScaleMultiplier(1f);
-            }
-        }
-        else
-        {
-            TimeLoop.SetTimeScaleMultiplier(1f);
         }
 
-        foreach (var star in starMap.GetStars())
+        var inBlackHole = IsTraveling() && GetActiveTravel().source != null && GetActiveTravel().source.IsBlackHole;
+        TimeLoop.SetTimeScaleMultiplier(inBlackHole ? blackHoleTimeScaleCurve.Evaluate(GetActiveTravel().Progress) : 1f);
+
+
+        if (!TimeLoop.IsRewinding)
         {
-            if (star.IsBlackHole || star.IsSupernova)
+            foreach (var star in starMap.GetStars())
             {
-                float distanceToDangerousStar = Vector3.Distance(transform.localPosition, star.transform.localPosition);
-                if (distanceToDangerousStar < star.RemnantRadius)
+                if (!star.Remnant.NeedsShield() || star.Remnant.HasShields(shipCargo.GetCargo()))
                 {
-                    if (IsTravelingTo(star))
+                    // Shielded from dangerous effects and forced travel
+                    continue;
+                }
+                if (star.IsBlackHole || star.IsSupernova)
+                {
+                    var distanceToDangerousStar = Vector3.Distance(transform.localPosition, star.transform.localPosition);
+                    if (distanceToDangerousStar < star.RemnantRadius)
                     {
+                        if (star.IsBlackHole && !IsTravelingTo(star))
+                        {
+                            TravelTo(star.transform.localPosition, blackHoleSpeed, blackHoleBias, star);
+                        }
+                        else if (star.IsSupernova && !IsTravelingTo(star))
+                        {
+                            var supernovaSpeed = distanceToDangerousStar / supernovaKillDuration;
+                            TravelTo(star.transform.localPosition, supernovaSpeed, 0.5f, star);
+                            FadeController.Instance.StartFade(Color.white, supernovaKillDuration, fadeIn: false);
+                            Debug.Log("Entered supernova kill radius, initiating forced travel and fade out.");
+                        }
                         break;
                     }
-                    if (star.IsBlackHole)
-                    {
-                        TravelTo(star.transform.localPosition, blackHoleSpeed, blackHoleBias, star);
-                    }
-                    else if (star.IsSupernova)
-                    {
-                        TravelTo(star.transform.localPosition, supernovaSpeed, supernovaBias, star);
-                        FadeController.Instance.StartFade(Color.white, supernovaKillDuration, fadeIn: false);
-                    }
-                    break;
                 }
             }
         }
@@ -112,10 +112,10 @@ public class ShipController : MonoBehaviour
         else
         {
             var lastTravel = travelHistory.Pop();
-            lastTravel.end = lastTravel.GetPosition(TimeLoop.CurrentTime);
+            lastTravel.end = lastTravel.Position;
             lastTravel.endTime = TimeLoop.CurrentTime;
             travelHistory.Push(lastTravel);
-            transform.localPosition = lastTravel.GetPosition(TimeLoop.CurrentTime);
+            transform.localPosition = lastTravel.Position;
             return true;
         }
     }
@@ -171,18 +171,19 @@ public class ShipController : MonoBehaviour
         public readonly bool IsPast => TimeLoop.CurrentTime > endTime;
         public readonly bool IsFuture => TimeLoop.CurrentTime < startTime;
 
-        public readonly float GetProgress(float time)
+        public readonly float Progress
         {
-            if (time <= startTime) return 0f;
-            if (time >= endTime) return 1f;
-            float t = Mathf.Clamp01(Mathf.InverseLerp(startTime, endTime, time));
-            return Bias(t, bias);
+            get
+            {
+                var time = TimeLoop.CurrentTime;
+                if (time <= startTime) return 0f;
+                if (time >= endTime) return 1f;
+                float t = Mathf.Clamp01(Mathf.InverseLerp(startTime, endTime, time));
+                return Bias(t, bias);
+            }
         }
 
-        public readonly Vector3 GetPosition(float time)
-        {
-            return Vector3.Lerp(start, end, GetProgress(time));
-        }
+        public readonly Vector3 Position => Vector3.Lerp(start, end, Progress);
 
         static float Bias(float t, float bias) => t / ((1f / bias - 2f) * (1f - t) + 1f);
     }
