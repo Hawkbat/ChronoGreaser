@@ -99,17 +99,7 @@ public class PlayerController : MonoBehaviour
         // Emergency reset if player falls out of the world
         if (transform.position.y < -100f)
         {
-            TimeLoop.Instance.RewindToTime(0f);
-        }
-
-        // TODO: Remove debug hotkeys
-        if (Keyboard.current.rKey.wasPressedThisFrame)
-        {
-            TimeLoop.Instance.RewindToTime(0f);
-        }
-        if (Keyboard.current.fKey.wasPressedThisFrame)
-        {
-            TimeLoop.Instance.FastForwardToTime(TimeLoop.TotalDuration - 10f);
+            TimeLoop.SetTargetTime(0f);
         }
 
         if (!TimeLoop.IsPlaying && interactTarget != null)

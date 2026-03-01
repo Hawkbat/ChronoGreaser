@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class ShipCargoController : MonoBehaviour
 {
-    [SerializeField] List<CargoType> cargo = new();
+    [SerializeField] CargoType[] cargo = new CargoType[8];
     [SerializeField] float collectionDuration;
     [SerializeField] TextMeshProUGUI cargoText;
+    [SerializeField] TextMeshProUGUI[] cargoSlotTexts;
     [SerializeField] StarMapController starMap;
     [SerializeField] ShipController ship;
 
@@ -22,13 +23,16 @@ public class ShipCargoController : MonoBehaviour
     public float CollectionProgress => IsCollecting ? Mathf.Clamp01((TimeLoop.CurrentTime - collectionStartTime) / collectionDuration) : 0f;
 
     public IEnumerable<CargoType> GetCargo() => cargo;
+    public CargoType GetCargoAt(int index) => cargo[index];
+    public int CargoCount => cargo.Length;
+    public bool IsEmpty => cargo.All(c => c == CargoType.None);
 
     void Update()
     {
         while (cargoCollections.Count > 0 && cargoCollections.Peek().time > TimeLoop.CurrentTime)
         {
             var collection = cargoCollections.Pop();
-            cargo.Remove(collection.cargoType);
+            cargo[collection.index] = CargoType.None;
         }
 
         if (isCollecting && TimeLoop.CurrentTime < collectionStartTime)
@@ -46,12 +50,8 @@ public class ShipCargoController : MonoBehaviour
         if (isCollecting && CollectionProgress >= 1f)
         {
             var cargoType = currentHarvestable.Harvest();
-            cargo.Add(cargoType);
-            cargoCollections.Push(new CargoCollection
-            {
-                time = TimeLoop.CurrentTime,
-                cargoType = cargoType
-            });
+            var emptyIndex = System.Array.FindIndex(cargo, c => c == CargoType.None);
+            SetCargoAt(emptyIndex, cargoType);
             currentHarvestable = null;
             isCollecting = false;
         }
@@ -81,13 +81,17 @@ public class ShipCargoController : MonoBehaviour
             collectionTargetText = nearestHarvestable.CanHarvest ? nearestHarvestable.CargoType.GetDisplayName() : "Unidentified";
         }
 
-        var cargoListText = "None";
-        if (cargo.Count > 0)
+        cargoText.text = $"Collection Target:\n{collectionTargetText}\n\nCurrent Cargo:";
+
+        for (int i = 0; i < cargoSlotTexts.Length; i++)
         {
-            cargoListText = string.Join("\n", cargo.Select(c => c.GetDisplayName()));
+            cargoSlotTexts[i].text = cargo[i] != CargoType.None ? cargo[i].GetDisplayName() : string.Empty;
         }
 
-        cargoText.text = $"Collection Target:\n{collectionTargetText}\n\nCurrent Cargo:\n{cargoListText}";
+        if (IsEmpty)
+        {
+            cargoSlotTexts[0].text = CargoType.None.GetDisplayName();
+        }
     }
 
     public bool TryStartCollecting()
@@ -99,9 +103,28 @@ public class ShipCargoController : MonoBehaviour
         return true;
     }
 
+    public void SetCargoAt(int index, CargoType cargoType)
+    {
+        cargo[index] = cargoType;
+        cargoCollections.Push(new CargoCollection
+        {
+            time = TimeLoop.CurrentTime,
+            cargoType = cargoType,
+            index = index
+        });
+    }
+
+    public CargoType RemoveCargoAt(int index)
+    {
+        var cargoType = cargo[index];
+        SetCargoAt(index, CargoType.None);
+        return cargoType;
+    }
+
     struct CargoCollection
     {
         public float time;
         public CargoType cargoType;
+        public int index;
     }
 }

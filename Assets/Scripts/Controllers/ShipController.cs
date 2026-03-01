@@ -44,7 +44,7 @@ public class ShipController : MonoBehaviour
             if (!currentTravel.IsActive && currentTravel.source != null)
             {
                 // Death to dangerous star; rewind to start of loop
-                TimeLoop.Instance.RewindToTime(0f);
+                TimeLoop.SetTargetTime(0f);
             }
         }
 

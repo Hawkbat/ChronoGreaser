@@ -61,7 +61,7 @@ public class ButtonControl : MonoBehaviour, IInteractable
             }
         }
 
-        pressed = currentPress.IsPressed;
+        pressed = !locked && currentPress.IsPressed;
         button.position = Vector3.Lerp(releasedTransform.position, pressedTransform.position, pressed ? 1f : 0f);
     }
 
