@@ -1093,7 +1093,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.375
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 75
   orthographic: 0
@@ -4557,9 +4557,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  supernovaSpeed: 0.1
-  supernovaBias: 0.6
   supernovaKillDuration: 10
+  shipCargo: {fileID: 170606708}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

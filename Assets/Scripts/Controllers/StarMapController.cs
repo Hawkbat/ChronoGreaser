@@ -20,9 +20,9 @@ public class StarMapController : MonoBehaviour
     {
         foreach (var star in stars)
         {
-            if (star.IsDead && star.Remnant != null)
+            if (star.Remnant != null && star.Remnant.IsActive)
                 yield return star.Remnant;
-            else
+            else if (!star.IsDead)
                 yield return star;
         }
         foreach (var scanBeacon in scanBeacons)
@@ -32,9 +32,9 @@ public class StarMapController : MonoBehaviour
     {
         foreach (var star in stars)
         {
-            if (star.IsDead && star.Remnant != null)
+            if (star.Remnant != null && star.Remnant.IsActive)
                 yield return star.Remnant;
-            else
+            else if (!star.IsDead)
                 yield return star;
 
         }

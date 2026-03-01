@@ -32,7 +32,6 @@ public class FadeController : MonoBehaviour
         this.fadeStartTime = TimeLoop.CurrentTime;
         this.fadeEndTime = fadeStartTime + duration;
         isFading = true;
-        overlay.enabled = true;
     }
 
     public void StopFade()
@@ -62,7 +61,7 @@ public class FadeController : MonoBehaviour
 
     void Update()
     {
-        if (isFading && TimeLoop.CurrentTime <= fadeStartTime)
+        if (isFading && TimeLoop.CurrentTime < fadeStartTime)
         {
             isFading = false;
             overlay.enabled = false;
@@ -74,6 +73,7 @@ public class FadeController : MonoBehaviour
             var c = fadeColor;
             c.a = fadeIn ? 1f - t : t;
             overlay.color = c;
+            overlay.enabled = c.a > 0f;
         }
     }
 }
