@@ -156,8 +156,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LineVisual
   billboard: 0
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   color: {r: 1, g: 1, b: 1, a: 1}
   length: 1
 --- !u!1001 &4395849226753918320
@@ -262,8 +262,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorVisual
   billboard: 0
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   color: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
 --- !u!4 &4218616012962701979 stripped
 Transform:
@@ -377,6 +377,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorVisual
   billboard: 0
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   color: {r: 1, g: 1, b: 1, a: 1}

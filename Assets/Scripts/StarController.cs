@@ -34,7 +34,7 @@ public class StarController : MonoBehaviour
     StarMapController starMap;
     SphereCollider col;
 
-    public bool IsAlive => TimeLoop.CurrentTime < deathTime;
+    public bool IsAlive => TimeLoop.CurrentTime < startDecayTime;
     public bool IsDecaying => TimeLoop.CurrentTime >= startDecayTime && TimeLoop.CurrentTime < deathTime;
     public bool IsDead => TimeLoop.CurrentTime >= deathTime;
     public float LifeProgress => Mathf.Clamp01(Mathf.InverseLerp(0f, startDecayTime, TimeLoop.CurrentTime));
@@ -49,8 +49,8 @@ public class StarController : MonoBehaviour
     public float NebulaProgress => hasNebula ? Mathf.Clamp01((TimeLoop.CurrentTime - deathTime) / nebulaDuration) : 0f;
     public float BlackHoleProgress => hasBlackHole ? Mathf.Clamp01((TimeLoop.CurrentTime - deathTime) / blackHoleDuration) : 0f;
     public float SupernovaRadius => hasSupernova ? radius * supernovaSizeCurve.Evaluate(SupernovaProgress) : 0f;
-    public float NebulaRadius => hasNebula ? radius * nebulaSizeCurve.Evaluate(SupernovaProgress) : 0f;
-    public float BlackHoleRadius => hasBlackHole ? radius * blackHoleSizeCurve.Evaluate(SupernovaProgress) : 0f;
+    public float NebulaRadius => hasNebula ? radius * nebulaSizeCurve.Evaluate(NebulaProgress) : 0f;
+    public float BlackHoleRadius => hasBlackHole ? radius * blackHoleSizeCurve.Evaluate(BlackHoleProgress) : 0f;
 
     public float DangerRadius => Mathf.Max(SupernovaRadius, NebulaRadius, BlackHoleRadius);
 
@@ -67,7 +67,7 @@ public class StarController : MonoBehaviour
 
     void Update()
     {
-        starVisual.enabled = IsAlive;
+        starVisual.enabled = IsAlive || IsDecaying;
         starVisual.rimColor = RimColor;
         starVisual.innerColor = InnerColor;
         starVisual.transform.localScale = Radius * Vector3.one;

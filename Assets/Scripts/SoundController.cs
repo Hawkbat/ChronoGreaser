@@ -10,11 +10,13 @@ public class SoundController : MonoBehaviour
 
     AudioSource audioSource;
     Stack<SoundTrigger> triggers = new();
+    float baseVolume = 1f;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         audioSource.outputAudioMixerGroup = isMusic ? AudioController.GetInstance().MusicGroup : AudioController.GetInstance().SoundsGroup;
+        baseVolume = audioSource.volume;
         triggers = new();
     }
 
@@ -30,16 +32,18 @@ public class SoundController : MonoBehaviour
                 var trigger = triggers.Pop();
                 if (TimeLoop.CurrentTime >= trigger.time && !muteOnRewind)
                 {
-                    audioSource.volume = trigger.volume;
+                    audioSource.volume = baseVolume * trigger.volume;
                     audioSource.Play();
                 }
             }
         }
     }
 
+    public bool IsPlaying() => audioSource.isPlaying;
+
     public void Play(float volume = 1f)
     {
-        audioSource.volume = volume;
+        audioSource.volume = volume * baseVolume;
         audioSource.Play();
         triggers.Push(new SoundTrigger
         {
@@ -47,6 +51,35 @@ public class SoundController : MonoBehaviour
             duration = audioSource.clip.length,
             volume = volume
         });
+    }
+
+    public void Stop()
+    {
+        audioSource.Stop();
+        if (triggers.Count > 0)
+        {
+            var trigger = triggers.Pop();
+            trigger.duration = TimeLoop.CurrentTime - trigger.time;
+            triggers.Push(trigger);
+        }
+    }
+
+    public void SetPlaying(bool playing, float volume = 1f)
+    {
+        if (playing)
+        {
+            if (!audioSource.isPlaying)
+            {
+                Play(volume);
+            }
+        }
+        else
+        {
+            if (audioSource.isPlaying)
+            {
+                Stop();
+            }
+        }
     }
 
     struct SoundTrigger

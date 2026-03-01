@@ -9,6 +9,7 @@ public class ShipTravelController : MonoBehaviour
     [SerializeField] ShipController ship;
     [SerializeField] TravelLineController simLine;
     [SerializeField] GameObject linePrefab;
+    [SerializeField] SoundController engineRumbleSound;
 
     List<TravelLineController> activeLines = new();
     Stack<TravelLineController> linePool = new();
@@ -69,6 +70,8 @@ public class ShipTravelController : MonoBehaviour
                 line.SetTravel(travel);
             }
         }
+
+        engineRumbleSound.SetPlaying(ship.IsTraveling());
     }
 
     public void SetDistance(float newDistance)

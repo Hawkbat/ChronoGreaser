@@ -37,7 +37,7 @@ public class TimeLoop : MonoBehaviour
         get
         {
             if (instance == null) return 1f;
-            if (IsStopped) return 0f;
+            if (IsStopped || IsResetting) return 0f;
             if (IsRewinding) return -instance.rewindSpeed;
             if (IsFastForwarding) return instance.fastForwardSpeed;
             return instance.timeScale * instance.timeScaleMultiplier;
@@ -145,7 +145,6 @@ public class TimeLoop : MonoBehaviour
     {
         if (isStopped) return;
         isStopped = true;
-        timeScale = 0f;
         OnStopped.Invoke();
         StartCoroutine(DoStoppedTimeLoopEnding());
     }
@@ -181,7 +180,6 @@ public class TimeLoop : MonoBehaviour
         isStopped = false;
         isRewinding = false;
         isFastForwarding = false;
-        timeScale = 1f;
         OnResume.Invoke();
     }
 

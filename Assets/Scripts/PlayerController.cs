@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnGUI()
+#if DEBUG_GUI
+    void OnGUI()
     {
         GUILayout.Label($"Time: {TimeLoop.CurrentTime:F2} / {TimeLoop.TotalDuration:F2} (Scale: {TimeLoop.TimeScale:F2})");
         GUILayout.HorizontalSlider(TimeLoop.NormalizedTime, 0f, 1f, GUILayout.Width(400f));
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
         GUILayout.Label("Hover Target: " + (hoverTarget != null ? hoverTarget.ToString() : "None"));
         GUILayout.Label("Interact Target: " + (interactTarget != null ? interactTarget.ToString() : "None"));
     }
+#endif
 
     void Update()
     {

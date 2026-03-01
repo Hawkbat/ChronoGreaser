@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarVisual
   billboard: 1
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   rimColor: {r: 0.7490196, g: 0, b: 0, a: 1}
   innerColor: {r: 1.0592737, g: 1.0592737, b: 1.0592737, a: 1}
   rim: 0
@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlackHoleVisual
   billboard: 1
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   rimColor: {r: 3.9999986, g: 2.0104704, b: 0, a: 0}
   innerColor: {r: 0, g: 0, b: 0, a: 0}
   rim: 0.45
@@ -322,8 +322,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadiusVisual
   billboard: 0
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   color: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &3631110708605899708
 GameObject:
@@ -429,8 +429,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NebulaVisual
   billboard: 1
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
 --- !u!1 &5259580740168451367
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,8 +535,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SupernovaVisual
   billboard: 1
-  visibilityPosition: {x: 0, y: 0, z: 0}
-  visibilityRadius: 2
+  visibilityPosition: {x: -7, y: 1, z: 0}
+  visibilityRadius: 2.8
   rimColor: {r: 0, g: 1.5078539, b: 2.0000005, a: 0}
   innerColor: {r: 1.0592737, g: 1.0592737, b: 1.0592737, a: 0}
   rim: 0.25
@@ -752,9 +752,9 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 3
-      inSlope: 2
-      outSlope: 2
+      value: 0
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -911,21 +911,30 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 0.8
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -11.996352
+      outSlope: -11.996352
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11022032
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

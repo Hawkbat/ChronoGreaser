@@ -11,13 +11,20 @@ public class StarMapController : MonoBehaviour
     [SerializeField] ShipController ship;
 
     List<StarController> stars = new();
+    List<ScanBeaconController> scanBeacons = new();
 
     public ShipController GetShip() => ship;
     public IEnumerable<StarController> GetStars() => stars;
+    public IEnumerable<ScanBeaconController> GetScanBeacons() => scanBeacons;
 
     public void RegisterStar(StarController star)
     {
         stars.Add(star);
+    }
+
+    public void RegisterScanBeacon(ScanBeaconController scanBeacon)
+    {
+        scanBeacons.Add(scanBeacon);
     }
 
     public void SetRotation(Vector3 angles)
