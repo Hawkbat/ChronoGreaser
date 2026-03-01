@@ -139,40 +139,6 @@ public class TimeLoop : MonoBehaviour
         {
             StopTimeLoop();
         }
-        if (Keyboard.current.rKey.wasPressedThisFrame)
-        {
-            RewindToTime(0f);
-        }
-        if (Keyboard.current.fKey.wasPressedThisFrame)
-        {
-            FastForwardToTime(totalDuration - 10f);
-        }
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.Label($"Time: {CurrentTime:F2} / {TotalDuration:F2} (Scale: {TimeScale:F2})");
-        GUILayout.HorizontalSlider(NormalizedTime, 0f, 1f, GUILayout.Width(400f));
-        if (IsResetting)
-        {
-            GUILayout.Label("Resetting...");
-        }
-        else if (IsStopped)
-        {
-            GUILayout.Label("Stopped");
-        }
-        else if (IsRewinding)
-        {
-            GUILayout.Label("Rewinding...");
-        }
-        else if (IsFastForwarding)
-        {
-            GUILayout.Label("Fast Forwarding...");
-        }
-        else
-        {
-            GUILayout.Label("Playing");
-        }
     }
 
     void StopTimeLoop()
@@ -210,7 +176,7 @@ public class TimeLoop : MonoBehaviour
         RewindToTime(0f);
     }
 
-    void ResumeTimeLoop()
+    public void ResumeTimeLoop()
     {
         isStopped = false;
         isRewinding = false;
@@ -219,7 +185,7 @@ public class TimeLoop : MonoBehaviour
         OnResume.Invoke();
     }
 
-    void RewindToTime(float targetTime)
+    public void RewindToTime(float targetTime)
     {
         if (isRewinding) return;
         ResumeTimeLoop();
@@ -235,7 +201,7 @@ public class TimeLoop : MonoBehaviour
         ResumeTimeLoop();
     }
 
-    void FastForwardToTime(float targetTime)
+    public void FastForwardToTime(float targetTime)
     {
         if (isFastForwarding) return;
         ResumeTimeLoop();

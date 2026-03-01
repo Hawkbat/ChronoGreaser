@@ -27,16 +27,23 @@ public class ShipTravelController : MonoBehaviour
 
     void Update()
     {
-        simLine.SetTravel(new ShipController.Travel
+        if (ship.IsTraveling())
         {
-            start = GetTravelStart(),
-            startTime = TimeLoop.CurrentTime,
-            end = GetTravelEnd(),
-            endTime = TimeLoop.CurrentTime + GetTravelDuration(),
-            bias = 0.5f,
-            id = -1,
-            source = null
-        });
+            simLine.ClearTravel();
+        }
+        else
+        {
+            simLine.SetTravel(new ShipController.Travel
+            {
+                start = GetTravelStart(),
+                startTime = TimeLoop.CurrentTime,
+                end = GetTravelEnd(),
+                endTime = TimeLoop.CurrentTime + GetTravelDuration(),
+                bias = 0.5f,
+                id = -1,
+                source = null
+            });
+        }
 
         travelsToReview.Clear();
         travelsToReview.AddRange(ship.GetTravelHistory().Where(t => t.source == null));

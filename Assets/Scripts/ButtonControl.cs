@@ -67,6 +67,7 @@ public class ButtonControl : MonoBehaviour, IInteractable
 
     public bool AllowInteraction() => TimeLoop.IsPlaying && !locked;
     public bool InteractionLocksCamera() => false;
+    public float GetInteractionCameraSpeedMultiplier() => 0.5f;
 
     public void StartInteraction(Vector3 worldPos)
     {

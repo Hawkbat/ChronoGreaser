@@ -89,10 +89,17 @@ public class ShipController : MonoBehaviour
 
     public bool InterruptTravel(bool overrideNaturalTravel)
     {
-        if (travelHistory.Count == 0)
+        if (travelHistory.Count == 0 || TimeLoop.CurrentTime >= travelHistory.Peek().endTime)
         {
+            // Nothing to interrupt
             return true;
-        } else if (travelHistory.Count > 0 && TimeLoop.CurrentTime < travelHistory.Peek().endTime && (travelHistory.Peek().source == null || overrideNaturalTravel))
+        }
+        else if (travelHistory.Count > 0 && travelHistory.Peek().source != null && !overrideNaturalTravel)
+        {
+            // Can't interrupt natural travel (e.g. being pulled into a black hole)
+            return false;
+        }
+        else
         {
             var lastTravel = travelHistory.Pop();
             lastTravel.end = lastTravel.GetPosition(TimeLoop.CurrentTime);
@@ -101,7 +108,6 @@ public class ShipController : MonoBehaviour
             transform.localPosition = lastTravel.GetPosition(TimeLoop.CurrentTime);
             return true;
         }
-        return false;
     }
 
     public bool TravelTo(Vector3 destination, float speed, float bias, StarController source = null)

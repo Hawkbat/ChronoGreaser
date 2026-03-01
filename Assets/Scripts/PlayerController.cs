@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -63,7 +64,28 @@ public class PlayerController : MonoBehaviour
 
     private void OnGUI()
     {
-        GUILayout.Space(100f);
+        GUILayout.Label($"Time: {TimeLoop.CurrentTime:F2} / {TimeLoop.TotalDuration:F2} (Scale: {TimeLoop.TimeScale:F2})");
+        GUILayout.HorizontalSlider(TimeLoop.NormalizedTime, 0f, 1f, GUILayout.Width(400f));
+        if (TimeLoop.IsResetting)
+        {
+            GUILayout.Label("Resetting...");
+        }
+        else if (TimeLoop.IsStopped)
+        {
+            GUILayout.Label("Stopped");
+        }
+        else if (TimeLoop.IsRewinding)
+        {
+            GUILayout.Label("Rewinding...");
+        }
+        else if (TimeLoop.IsFastForwarding)
+        {
+            GUILayout.Label("Fast Forwarding...");
+        }
+        else
+        {
+            GUILayout.Label("Playing");
+        }
         GUILayout.Label("Snapshots: " + history.Count);
         GUILayout.Label("Estimated Memory Usage: " + history.Count * sizeof(float) * 6f / 1024f + " KB");
         GUILayout.Label("Hover Target: " + (hoverTarget != null ? hoverTarget.ToString() : "None"));
@@ -75,7 +97,17 @@ public class PlayerController : MonoBehaviour
         // Emergency reset if player falls out of the world
         if (transform.position.y < -100f)
         {
-            transform.position = Vector3.up * 0.1f;
+            TimeLoop.GetInstance().RewindToTime(0f);
+        }
+
+        // TODO: Remove debug hotkeys
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            TimeLoop.GetInstance().RewindToTime(0f);
+        }
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            TimeLoop.GetInstance().FastForwardToTime(TimeLoop.TotalDuration - 10f);
         }
 
         if (!TimeLoop.IsPlaying && interactTarget != null)
@@ -123,6 +155,12 @@ public class PlayerController : MonoBehaviour
         var lookInput = lookAction.ReadValue<Vector2>();
 
         var adjustedLookSpeed = new Vector2(lookSpeed.x * Save.Instance.cameraSensitivityX, lookSpeed.y * Save.Instance.cameraSensitivityY);
+
+        if (interactTarget != null)
+        {
+            var cameraSpeedMultiplier = interactTarget.GetInteractionCameraSpeedMultiplier();
+            adjustedLookSpeed *= cameraSpeedMultiplier;
+        }
 
         if (interactTarget == null || !interactTarget.InteractionLocksCamera())
         {

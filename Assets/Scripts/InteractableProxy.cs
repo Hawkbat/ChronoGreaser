@@ -21,6 +21,7 @@ public class InteractableProxy : MonoBehaviour, IInteractable
 
     public bool AllowInteraction() => target != null && target.AllowInteraction();
     public bool InteractionLocksCamera() => target != null && target.InteractionLocksCamera();
+    public float GetInteractionCameraSpeedMultiplier() => target != null ? target.GetInteractionCameraSpeedMultiplier() : 1f;
 
     public void StartInteraction(Vector3 worldPos)
     {
