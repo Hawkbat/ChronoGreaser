@@ -23,7 +23,10 @@ public class ScanBeaconController : MonoBehaviour, IScannable, IHarvestable
     public string ScanName => scanName;
     public string ScanMessage => scanMessage;
     public bool Harvested => harvested;
-    public bool CanHarvest => cargoType != CargoType.None && scanned && !harvested;
+    public HarvestStatus HarvestStatus =>
+        !scanned ? HarvestStatus.NotScanned :
+        harvested ? HarvestStatus.Depleted :
+        HarvestStatus.Ready;
     public float HarvestRadius => scanRadius;
     public CargoType CargoType => cargoType;
 

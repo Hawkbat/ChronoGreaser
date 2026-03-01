@@ -11,14 +11,11 @@ public class ButtonControl : MonoBehaviour, IInteractable
     [SerializeField] SoundController pressSound;
     [SerializeField] SoundController releaseSound;
 
+    bool isInteracting;
     PressData currentPress;
     Stack<PressData> pressHistory = new();
 
-    public bool Pressed
-    {
-        get => pressed;
-        set => pressed = value;
-    }
+    public bool Pressed => pressed && !TimeLoop.IsRewinding;
 
     public bool Locked
     {
@@ -29,39 +26,34 @@ public class ButtonControl : MonoBehaviour, IInteractable
     void Awake()
     {
         pressed = false;
+        isInteracting = false;
         currentPress = new PressData
         {
             pressTime = 0f,
             releaseTime = 0f
         };
         pressHistory = new();
-        pressHistory.Push(currentPress);
         InteractableProxy.Make(button.gameObject, this);
     }
 
     void Update()
     {
-        if (TimeLoop.IsRewinding)
+        while (pressHistory.Count > 0 && pressHistory.Peek().pressTime > TimeLoop.CurrentTime)
         {
-            if (pressHistory.Count > 1)
-            {
-                var prev = pressHistory.Peek();
-                while (pressHistory.Count > 0 && prev.pressTime > TimeLoop.CurrentTime)
-                {
-                    currentPress = prev;
-                    pressHistory.Pop();
-                }
-            }
+            pressHistory.Pop();
+        }
+        if (isInteracting)
+        {
+            pressed = !locked && currentPress.IsPressed;
+        }
+        else if (pressHistory.Count > 0)
+        {
+            pressed = pressHistory.Peek().IsPressed;
         }
         else
         {
-            while (pressHistory.Count > 1 && pressHistory.Peek().pressTime > TimeLoop.CurrentTime)
-            {
-                pressHistory.Pop();
-            }
+            pressed = false;
         }
-
-        pressed = !locked && currentPress.IsPressed;
         button.position = Vector3.Lerp(releasedTransform.position, pressedTransform.position, pressed ? 1f : 0f);
     }
 
@@ -71,6 +63,7 @@ public class ButtonControl : MonoBehaviour, IInteractable
 
     public void StartInteraction(Vector3 worldPos)
     {
+        isInteracting = true;
         currentPress = new PressData
         {
             pressTime = TimeLoop.CurrentTime,
@@ -86,6 +79,7 @@ public class ButtonControl : MonoBehaviour, IInteractable
 
     public void EndInteraction(Vector3 worldPos)
     {
+        isInteracting = false;
         currentPress.releaseTime = TimeLoop.CurrentTime;
         pressHistory.Push(currentPress);
         if (releaseSound != null) releaseSound.Play();

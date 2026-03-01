@@ -14,14 +14,20 @@ public class SliderControl : MonoBehaviour, IInteractable
     [SerializeField] SoundController pressSound;
     [SerializeField] SoundController releaseSound;
 
+    float initialValue;
     bool isInteracting;
-    Snapshot currentSnapshot;
+    Vector3 interactOffset;
+    Snapshot rewindSnapshot;
     Stack<Snapshot> snapshots = new();
 
     public float Value
     {
         get => value;
-        set => this.value = Mathf.Clamp(value, minValue, maxValue);
+        set
+        {
+            this.value = Mathf.Clamp(value, minValue, maxValue);
+            UpsertSnapshot();
+        }
     }
 
     public bool Locked
@@ -34,55 +40,41 @@ public class SliderControl : MonoBehaviour, IInteractable
 
     void Awake()
     {
-        currentSnapshot = new Snapshot
-        {
-            time = TimeLoop.CurrentTime,
-            value = value
-        };
+        initialValue = value;
         snapshots = new();
-        snapshots.Push(currentSnapshot);
         InteractableProxy.Make(handle.gameObject, this);
     }
 
     void Update()
     {
-        if (TimeLoop.IsRewinding)
+        if (!TimeLoop.IsRewinding)
         {
-            if (snapshots.Count > 1)
+            rewindSnapshot = new Snapshot
             {
-                var prev = snapshots.Peek();
-                while (snapshots.Count > 1 && prev.time > TimeLoop.CurrentTime)
-                {
-                    ApplySnapshot(prev);
-                    currentSnapshot = prev;
-                    snapshots.Pop();
-                }
-                if (snapshots.Count > 1)
-                {
-                    prev = snapshots.Peek();
-                    BlendSnapshots(prev, currentSnapshot, TimeLoop.CurrentTime);
-                }
-                else
-                {
-                    ApplySnapshot(currentSnapshot);
-                }
+                time = 0,
+                value = initialValue,
+            };
+        }
+
+        while (snapshots.Count > 0 && snapshots.Peek().time > TimeLoop.CurrentTime)
+        {
+            rewindSnapshot = snapshots.Pop();
+        }
+        if (snapshots.Count > 0)
+        {
+            var prev = snapshots.Peek();
+            if (TimeLoop.IsRewinding && prev.time < rewindSnapshot.time)
+            {
+                BlendSnapshots(prev, rewindSnapshot, TimeLoop.CurrentTime);
+            }
+            else
+            {
+                ApplySnapshot(prev);
             }
         }
         else
         {
-            while (snapshots.Count > 1 && snapshots.Peek().time > TimeLoop.CurrentTime)
-            {
-                snapshots.Pop();
-            }
-
-            currentSnapshot.time = TimeLoop.CurrentTime;
-            currentSnapshot.value = value;
-            var hasChanged = snapshots.Count == 0 || currentSnapshot.value != snapshots.Peek().value;
-            var debounceTimePassed = snapshots.Count == 0 || currentSnapshot.time - snapshots.Peek().time >= snapshotDebounceTime;
-            if (hasChanged && debounceTimePassed)
-            {
-                snapshots.Push(currentSnapshot);
-            }
+            value = initialValue;
         }
 
         var t = Mathf.InverseLerp(minValue, maxValue, value);
@@ -97,15 +89,18 @@ public class SliderControl : MonoBehaviour, IInteractable
     {
         if (pressSound != null) pressSound.Play();
         isInteracting = true;
+        interactOffset = handle.position - worldPos;
     }
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
     {
+        var handlePos = worldPos + interactOffset;
         var minToMax = maxTransform.position - minTransform.position;
-        var minToHandle = worldPos - minTransform.position;
+        var minToHandle = handlePos - minTransform.position;
         var projectedLength = Vector3.Dot(minToHandle, minToMax.normalized);
         var t = Mathf.Clamp01(projectedLength / minToMax.magnitude);
         value = Mathf.Lerp(minValue, maxValue, t);
+        UpsertSnapshot();
     }
 
     public void EndInteraction(Vector3 worldPos)
@@ -119,6 +114,26 @@ public class SliderControl : MonoBehaviour, IInteractable
         minValue = min;
         maxValue = max;
         value = Mathf.Clamp(value, minValue, maxValue);
+        UpsertSnapshot();
+    }
+
+    void UpsertSnapshot()
+    {
+        if (snapshots.Count > 0)
+        {
+            var prev = snapshots.Peek();
+            if (Mathf.Approximately(prev.value, value))
+                return;
+            if (TimeLoop.CurrentTime - prev.time < snapshotDebounceTime)
+            {
+                snapshots.Pop();
+            }
+        }
+        snapshots.Push(new Snapshot
+        {
+            time = TimeLoop.CurrentTime,
+            value = value
+        });
     }
 
     void ApplySnapshot(Snapshot snapshot)

@@ -30,7 +30,11 @@ public abstract class StarRemnantController : MonoBehaviour, IScannable, IHarves
     public string ScanMessage => scanMessage;
 
     public float HarvestRadius => scanRadius;
-    public bool CanHarvest => IsActive && scanned;
+    public HarvestStatus HarvestStatus =>
+        !IsActive ? HarvestStatus.Missing :
+        !scanned ? HarvestStatus.NotScanned :
+        cargoType == CargoType.None ? HarvestStatus.Depleted :
+        HarvestStatus.Ready;
     public CargoType CargoType => cargoType;
 
     public bool NeedsShield() => validShields.Count > 0f;

@@ -19,7 +19,7 @@ public class ShipCargoController : MonoBehaviour
     float collectionStartTime;
 
     public bool IsCollecting => isCollecting;
-    public bool CanCollect => nearestHarvestable != null && nearestHarvestable.CanHarvest && !IsCollecting && !ship.IsTraveling();
+    public bool CanCollect => nearestHarvestable != null && nearestHarvestable.HarvestStatus == HarvestStatus.Ready && !IsCollecting && !ship.IsTraveling();
     public float CollectionProgress => IsCollecting ? Mathf.Clamp01((TimeLoop.CurrentTime - collectionStartTime) / collectionDuration) : 0f;
 
     public IEnumerable<CargoType> GetCargo() => cargo;
@@ -78,7 +78,12 @@ public class ShipCargoController : MonoBehaviour
         }
         else if (nearestHarvestable != null)
         {
-            collectionTargetText = nearestHarvestable.CanHarvest ? nearestHarvestable.CargoType.GetDisplayName() : "Unidentified";
+            collectionTargetText = nearestHarvestable.HarvestStatus switch
+            {
+                HarvestStatus.NotScanned => "Not Scanned",
+                HarvestStatus.Ready => nearestHarvestable.CargoType.GetDisplayName(),
+                _ => "Not Found"
+            };
         }
 
         cargoText.text = $"Collection Target:\n{collectionTargetText}\n\nCurrent Cargo:";

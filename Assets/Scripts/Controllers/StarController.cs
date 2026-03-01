@@ -33,7 +33,11 @@ public class StarController : MonoBehaviour, IScannable, IHarvestable
     public float ScanRadius => scanRadius;
     public string ScanName => scanName;
     public string ScanMessage => scanMessage;
-    public bool CanHarvest => (IsAlive || IsDecaying) && cargoType != CargoType.None && scanned;
+    public HarvestStatus HarvestStatus =>
+        IsDead ? HarvestStatus.Missing :
+        !scanned ? HarvestStatus.NotScanned :
+        cargoType == CargoType.None ? HarvestStatus.Depleted :
+        HarvestStatus.Ready;
     public float HarvestRadius => scanRadius;
     public CargoType CargoType => cargoType;
 
