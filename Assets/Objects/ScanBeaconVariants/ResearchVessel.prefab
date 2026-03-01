@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3266722969001321576
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: scanName
+      value: Research Vessel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: cargoType
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: scanMessage
+      value: Abandoned starship contains stable superconductors.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7983895217319873790, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
+      propertyPath: m_Name
+      value: ResearchVessel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}

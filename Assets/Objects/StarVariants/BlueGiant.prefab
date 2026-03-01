@@ -1,0 +1,209 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &308725655754288922
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4148931693181006369}
+    m_Modifications:
+    - target: {fileID: 1801858018153978268, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_Name
+      value: SupernovaRemnant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+--- !u!4 &7315457417776956667 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7047405102325246945, guid: bd5c4933133ea3c4399294ab8871a199, type: 3}
+  m_PrefabInstance: {fileID: 308725655754288922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4843425854660017837
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: radius
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: scanName
+      value: Blue Giant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: cargoType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: deathTime
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: scanRadius
+      value: 3.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: scanMessage
+      value: High energy plasma detected
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: startDecayTime
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeRimColorCurve.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeRimColorCurve.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeRimColorCurve.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeRimColorCurve.key1.g
+      value: 0.13368973
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: decayRimColorCurve.key0.g
+      value: 0.13333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeInnerColorCurve.key1.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeInnerColorCurve.key1.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeInnerColorCurve.key1.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: decayInnerColorCurve.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: decayInnerColorCurve.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: decayInnerColorCurve.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: lifeSizeCurve.m_Curve.Array.data[1].value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579972883903425201, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: decaySizeCurve.m_Curve.Array.data[0].value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8965554878371440015, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      propertyPath: m_Name
+      value: BlueGiant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7315457417776956667}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+--- !u!4 &4148931693181006369 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8837392068966485132, guid: 480312b1f4af0714daaca0a4044db8d8, type: 3}
+  m_PrefabInstance: {fileID: 4843425854660017837}
+  m_PrefabAsset: {fileID: 0}

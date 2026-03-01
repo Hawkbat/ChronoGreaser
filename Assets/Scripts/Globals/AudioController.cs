@@ -5,13 +5,16 @@ public class AudioController : MonoBehaviour
 {
     static AudioController instance;
 
-    public static AudioController GetInstance()
+    public static AudioController Instance
     {
-        if (instance == null)
+        get
         {
-            instance = FindFirstObjectByType<AudioController>();
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<AudioController>();
+            }
+            return instance;
         }
-        return instance;
     }
 
     [SerializeField] AudioMixer mixer;

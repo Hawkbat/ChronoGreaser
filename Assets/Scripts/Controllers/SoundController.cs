@@ -15,7 +15,7 @@ public class SoundController : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        audioSource.outputAudioMixerGroup = isMusic ? AudioController.GetInstance().MusicGroup : AudioController.GetInstance().SoundsGroup;
+        audioSource.outputAudioMixerGroup = isMusic ? AudioController.Instance.MusicGroup : AudioController.Instance.SoundsGroup;
         baseVolume = audioSource.volume;
         triggers = new();
     }

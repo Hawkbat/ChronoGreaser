@@ -8,6 +8,9 @@ public class ShipController : MonoBehaviour
     [SerializeField] float blackHoleSpeed = 2f;
     [SerializeField] float blackHoleBias = 0.8f;
     [SerializeField] AnimationCurve blackHoleTimeScaleCurve;
+    [SerializeField] float supernovaSpeed = 0.1f;
+    [SerializeField] float supernovaBias = 0.6f;
+    [SerializeField] float supernovaKillDuration = 10f;
 
     StarMapController starMap;
     Stack<Travel> travelHistory;
@@ -20,7 +23,7 @@ public class ShipController : MonoBehaviour
         nextTravelID = 1;
     }
 
-    private void Update()
+    void Update()
     {
         var visibilityPosition = starMap ? starMap.transform.position : transform.position;
         var visibilityRadius = starMap ? starMap.radius : 8f;
@@ -57,16 +60,24 @@ public class ShipController : MonoBehaviour
 
         foreach (var star in starMap.GetStars())
         {
-            if (star.IsBlackHole)
+            if (star.IsBlackHole || star.IsSupernova)
             {
-                float distanceToBlackHole = Vector3.Distance(transform.localPosition, star.transform.localPosition);
-                if (distanceToBlackHole < star.BlackHoleRadius)
+                float distanceToDangerousStar = Vector3.Distance(transform.localPosition, star.transform.localPosition);
+                if (distanceToDangerousStar < star.RemnantRadius)
                 {
-                    if (travelHistory.Count > 0 && travelHistory.Peek().source == star)
+                    if (IsTravelingTo(star))
                     {
                         break;
                     }
-                    TravelTo(star.transform.localPosition, blackHoleSpeed, blackHoleBias, star);
+                    if (star.IsBlackHole)
+                    {
+                        TravelTo(star.transform.localPosition, blackHoleSpeed, blackHoleBias, star);
+                    }
+                    else if (star.IsSupernova)
+                    {
+                        TravelTo(star.transform.localPosition, supernovaSpeed, supernovaBias, star);
+                        FadeController.Instance.StartFade(Color.white, supernovaKillDuration, fadeIn: false);
+                    }
                     break;
                 }
             }
@@ -109,9 +120,9 @@ public class ShipController : MonoBehaviour
         }
     }
 
-    public bool TravelTo(Vector3 destination, float speed, float bias, StarController source = null)
+    public bool TravelTo(Vector3 destination, float speed, float bias, StarController source)
     {
-        var canOverrideNaturalTravel = source != null && source.IsBlackHole;
+        var canOverrideNaturalTravel = source != null;
         if (!InterruptTravel(canOverrideNaturalTravel)) return false;
         float distance = Vector3.Distance(transform.localPosition, destination);
         float duration = distance / speed;
@@ -126,6 +137,11 @@ public class ShipController : MonoBehaviour
         );
         travelHistory.Push(travel);
         return true;
+    }
+
+    public bool IsTravelingTo(StarController star)
+    {
+        return IsTraveling() && travelHistory.Peek().source == star;
     }
 
     public struct Travel

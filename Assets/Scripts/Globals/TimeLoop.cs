@@ -79,13 +79,16 @@ public class TimeLoop : MonoBehaviour
         instance.timeScaleMultiplier = mult;
     }
 
-    public static TimeLoop GetInstance()
+    public static TimeLoop Instance
     {
-        if (instance == null)
+        get
         {
-            instance = FindFirstObjectByType<TimeLoop>();
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<TimeLoop>();
+            }
+            return instance;
         }
-        return instance;
     }
 
     void Awake()
@@ -152,9 +155,9 @@ public class TimeLoop : MonoBehaviour
 
     IEnumerator DoStoppedTimeLoopEnding()
     {
-        AudioController.GetInstance().SetMasterVolumeMultiplier(0f);
+        AudioController.        Instance.SetMasterVolumeMultiplier(0f);
         yield return new WaitForSeconds(5f);
-        AudioController.GetInstance().SetMasterVolumeMultiplier(1f);
+        AudioController.        Instance.SetMasterVolumeMultiplier(1f);
         Save.Instance.didTimeStopEnding = true;
         Save.SaveFile();
         SceneManager.LoadScene("Startup");

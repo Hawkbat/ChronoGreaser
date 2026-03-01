@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 3f;
     [SerializeField] float snapshotRecordInterval = 0.1f;
     [SerializeField] LayerMask interactableLayer;
+    [SerializeField] float interactRange = 2f;
     [SerializeField] Image cursor;
     [SerializeField] Color cursorDefaultColor;
     [SerializeField] Color cursorHoverColor;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         cam = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
 
-        var timeLoop = TimeLoop.GetInstance();
+        var timeLoop = TimeLoop.Instance;
         timeLoop.OnRewinding.AddListener(OnTimeLoopRewinding);
         timeLoop.OnFastForwarded.AddListener(OnTimeLoopFastForwarded);
     }
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
 
-        var timeLoop = TimeLoop.GetInstance();
+        var timeLoop = TimeLoop.Instance;
         if (timeLoop != null)
         {
             timeLoop.OnRewinding.RemoveListener(OnTimeLoopRewinding);
@@ -99,17 +99,17 @@ public class PlayerController : MonoBehaviour
         // Emergency reset if player falls out of the world
         if (transform.position.y < -100f)
         {
-            TimeLoop.GetInstance().RewindToTime(0f);
+            TimeLoop.Instance.RewindToTime(0f);
         }
 
         // TODO: Remove debug hotkeys
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
-            TimeLoop.GetInstance().RewindToTime(0f);
+            TimeLoop.Instance.RewindToTime(0f);
         }
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
-            TimeLoop.GetInstance().FastForwardToTime(TimeLoop.TotalDuration - 10f);
+            TimeLoop.Instance.FastForwardToTime(TimeLoop.TotalDuration - 10f);
         }
 
         if (!TimeLoop.IsPlaying && interactTarget != null)
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
         hoverTarget = null;
         Vector3 hoverPos = Vector3.zero;
         var ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out var hitInfo, 10f, interactableLayer, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out var hitInfo, interactRange, interactableLayer, QueryTriggerInteraction.Collide))
         {
 
             hoverTarget = hitInfo.collider.GetComponentInParent<IInteractable>();
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             hoverTarget = null;
-            hoverPos = ray.GetPoint(10f);
+            hoverPos = ray.GetPoint(interactRange);
         }
 
         if (interactTarget != null && !interactTarget.AllowInteraction())

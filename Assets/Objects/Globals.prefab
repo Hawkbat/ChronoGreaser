@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6927675043571681669}
   - component: {fileID: 3093182129627276757}
+  - component: {fileID: 9038831616824460043}
   - component: {fileID: 7979439942975125482}
   m_Layer: 0
   m_Name: Globals
@@ -49,6 +50,19 @@ MonoBehaviour:
   masterGroup: {fileID: 24300002, guid: 0873a38142611644393b3c7c7d721588, type: 2}
   musicGroup: {fileID: 1016041555423751996, guid: 0873a38142611644393b3c7c7d721588, type: 2}
   soundsGroup: {fileID: -2801691786577599239, guid: 0873a38142611644393b3c7c7d721588, type: 2}
+--- !u!114 &9038831616824460043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128658715978321078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fafccb7de00270c4eb4be0c5f73fdc05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeController
+  overlay: {fileID: 0}
 --- !u!114 &7979439942975125482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b0676b43069289438406c6d96beab9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeLoop
-  totalDuration: 120
+  totalDuration: 300
   timeScale: 1
   timeScaleMultiplier: 1
   rewindSpeed: 5

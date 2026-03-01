@@ -19,14 +19,25 @@ public class StarMapController : MonoBehaviour
     public IEnumerable<IScannable> GetScannables()
     {
         foreach (var star in stars)
-            yield return star;
+        {
+            if (star.IsDead && star.Remnant != null)
+                yield return star.Remnant;
+            else
+                yield return star;
+        }
         foreach (var scanBeacon in scanBeacons)
             yield return scanBeacon;
     }
     public IEnumerable<IHarvestable> GetHarvestables()
     {
         foreach (var star in stars)
-            yield return star;
+        {
+            if (star.IsDead && star.Remnant != null)
+                yield return star.Remnant;
+            else
+                yield return star;
+
+        }
         foreach (var scanBeacon in scanBeacons)
             yield return scanBeacon;
     }
