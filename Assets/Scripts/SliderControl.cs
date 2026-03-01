@@ -14,6 +14,7 @@ public class SliderControl : MonoBehaviour, IInteractable
     [SerializeField] SoundController pressSound;
     [SerializeField] SoundController releaseSound;
 
+    bool isInteracting;
     Snapshot currentSnapshot;
     Stack<Snapshot> snapshots = new();
 
@@ -28,6 +29,8 @@ public class SliderControl : MonoBehaviour, IInteractable
         get => locked;
         set => locked = value;
     }
+
+    public bool IsInteracting => isInteracting;
 
     void Awake()
     {
@@ -93,6 +96,7 @@ public class SliderControl : MonoBehaviour, IInteractable
     public void StartInteraction(Vector3 worldPos)
     {
         if (pressSound != null) pressSound.Play();
+        isInteracting = true;
     }
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
@@ -107,6 +111,14 @@ public class SliderControl : MonoBehaviour, IInteractable
     public void EndInteraction(Vector3 worldPos)
     {
         if (releaseSound != null) releaseSound.Play();
+        isInteracting = false;
+    }
+
+    public void SetMinMax(float min, float max)
+    {
+        minValue = min;
+        maxValue = max;
+        value = Mathf.Clamp(value, minValue, maxValue);
     }
 
     void ApplySnapshot(Snapshot snapshot)

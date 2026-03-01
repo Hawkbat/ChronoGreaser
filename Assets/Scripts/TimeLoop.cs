@@ -43,6 +43,7 @@ public class TimeLoop : MonoBehaviour
             return instance.timeScale * instance.timeScaleMultiplier;
         }
     }
+    public static float RawTimeScale => instance != null ? instance.timeScale : 1f;
     public static float DeltaTime => instance != null ? Time.deltaTime * TimeScale : Time.deltaTime;
     public static float TotalDuration => instance != null ? instance.totalDuration : 0f;
     public static float NormalizedTime => instance != null ? Mathf.Clamp01(instance.elapsedTime / instance.totalDuration) : 0f;
