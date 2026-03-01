@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SupernovaRemnantController
   radius: 1
-  duration: 30
+  duration: 60
   sizeCurve:
     serializedVersion: 2
     m_Curve:
