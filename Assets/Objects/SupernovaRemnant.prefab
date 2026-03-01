@@ -158,7 +158,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   scanned: 0
-  scanRadius: 1.25
+  scanRadius: 1
   scanName: Supernova
   scanMessage: Traces of fused heavy elements detected
   cargoType: 4

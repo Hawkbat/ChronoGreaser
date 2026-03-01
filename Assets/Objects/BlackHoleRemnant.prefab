@@ -167,11 +167,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   scanned: 0
-  scanRadius: 1.25
+  scanRadius: 1
   scanName: Black Hole
   scanMessage: High levels of radiation detected
   cargoType: 9
-  validShields: 030000000600000009000000
+  validShields: 0400000006000000
   visual: {fileID: 6404582793296937019}
   rimColorCurve:
     serializedVersion: 2

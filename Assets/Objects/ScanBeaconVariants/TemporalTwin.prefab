@@ -10,28 +10,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanName
-      value: Abandoned Vessel
+      value: Twin Vessel
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: cargoType
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanMessage
-      value: A stellar scoopcraft for harvesting gas and plasma from <b>supernovas</b>.
-        The shell of its hull is leaking <b>hydrogen</b>.
-      objectReference: {fileID: 0}
-    - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
-      propertyPath: unscannedColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
-      propertyPath: unscannedColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
-      propertyPath: unscannedColor.r
-      value: 0.32101834
+      value: A copy of this vessel from a parallel universe. Its <b>Superconducting
+        Alloys</b> have lost their useful properties.
       objectReference: {fileID: 0}
     - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -75,7 +63,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7983895217319873790, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: m_Name
-      value: ResearchVessel
+      value: TemporalTwin
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

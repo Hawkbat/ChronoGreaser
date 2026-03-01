@@ -10,20 +10,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanName
-      value: Abandoned Vessel
+      value: Wrecked Station
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: cargoType
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanMessage
-      value: A stellar scoopcraft for harvesting gas and plasma from <b>supernovas</b>.
-        The shell of its hull is leaking <b>hydrogen</b>.
+      value: Space station debris contains a prototype for withstanding the tidal
+        forces of <b>black holes</b> using various <b>heavy metals.</b>
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: unscannedColor.b
-      value: 0
+      value: 0.81722665
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: unscannedColor.g
@@ -31,7 +31,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: unscannedColor.r
-      value: 0.32101834
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -75,7 +75,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7983895217319873790, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: m_Name
-      value: ResearchVessel
+      value: StationWreckage
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
