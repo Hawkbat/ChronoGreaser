@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class ShipController : MonoBehaviour
 {
@@ -31,18 +30,18 @@ public class ShipController : MonoBehaviour
         if (travelHistory.Count > 0)
         {
             var currentTravel = travelHistory.Peek();
-            while (currentTravel.IsFuture(TimeLoop.CurrentTime))
+            while (currentTravel.IsFuture)
             {
                 travelHistory.Pop();
                 if (travelHistory.Count == 0) break;
                 currentTravel = travelHistory.Peek();
             }
             transform.localPosition = currentTravel.GetPosition(TimeLoop.CurrentTime);
-            if (currentTravel.IsActive(TimeLoop.CurrentTime))
+            if (currentTravel.IsActive)
             {
                 transform.localRotation = Quaternion.LookRotation((currentTravel.end - currentTravel.start).normalized, Vector3.up);
             }
-            if (currentTravel.IsActive(TimeLoop.CurrentTime) && currentTravel.source != null && currentTravel.source.IsBlackHole)
+            if (currentTravel.IsActive && currentTravel.source != null && currentTravel.source.IsBlackHole)
             {
                 TimeLoop.SetTimeScaleMultiplier(blackHoleTimeScaleCurve.Evaluate(currentTravel.GetProgress(TimeLoop.CurrentTime)));
             }
@@ -76,7 +75,7 @@ public class ShipController : MonoBehaviour
 
     public float GetTravelSpeed() => travelSpeed;
 
-    public bool IsTraveling() => travelHistory.Count > 0 && travelHistory.Peek().IsActive(TimeLoop.CurrentTime);
+    public bool IsTraveling() => travelHistory.Count > 0 && travelHistory.Peek().IsActive;
 
     public Travel GetActiveTravel() => IsTraveling() ? travelHistory.Peek() : default;
 
@@ -152,9 +151,9 @@ public class ShipController : MonoBehaviour
             this.source = source;
         }
 
-        public readonly bool IsActive(float time) => time >= startTime && time <= endTime;
-        public readonly bool IsPast(float time) => time > endTime;
-        public readonly bool IsFuture(float time) => time < startTime;
+        public readonly bool IsActive => TimeLoop.CurrentTime >= startTime && TimeLoop.CurrentTime <= endTime;
+        public readonly bool IsPast => TimeLoop.CurrentTime > endTime;
+        public readonly bool IsFuture => TimeLoop.CurrentTime < startTime;
 
         public readonly float GetProgress(float time)
         {

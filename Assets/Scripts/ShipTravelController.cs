@@ -59,7 +59,7 @@ public class ShipTravelController : MonoBehaviour
         }
         foreach (var travel in travelsToReview)
         {
-            if (travel.IsInitialized && !travel.IsFuture(TimeLoop.CurrentTime))
+            if (travel.IsInitialized && !travel.IsFuture)
             {
                 var line = activeLines.FirstOrDefault(l => l.GetTravel().id == travel.id);
                 if (line == null)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ScanBeaconController : MonoBehaviour
+public class ScanBeaconController : MonoBehaviour, IScannable, IHarvestable
 {
     [SerializeField] bool scanned;
     [SerializeField] bool harvested;
@@ -12,16 +12,19 @@ public class ScanBeaconController : MonoBehaviour
     [SerializeField] Color unscannedColor;
     [SerializeField] Color scannedColor;
 
+    StarMapController starMap;
     float scannedTime;
     float harvestedTime;
 
+    public Vector3 Position => transform.position;
     public bool Scanned => scanned;
     public bool CanScan => !scanned;
-    public bool Harvested => harvested;
-    public bool CanHarvest => cargoType != CargoType.None && scanned && !harvested;
     public float ScanRadius => scanRadius;
     public string ScanName => scanName;
     public string ScanMessage => scanMessage;
+    public bool Harvested => harvested;
+    public bool CanHarvest => cargoType != CargoType.None && scanned && !harvested;
+    public float HarvestRadius => scanRadius;
     public CargoType CargoType => cargoType;
 
     public void Scan()
@@ -37,8 +40,18 @@ public class ScanBeaconController : MonoBehaviour
         return cargoType;
     }
 
+    void Awake()
+    {
+        starMap = GetComponentInParent<StarMapController>();
+         if (starMap != null)
+        {
+            starMap.RegisterScanBeacon(this);
+        }
+    }
+
     void Update()
     {
+
         if (scanned && TimeLoop.CurrentTime < scannedTime)
         {
             scanned = false;
@@ -49,6 +62,11 @@ public class ScanBeaconController : MonoBehaviour
         }
         beaconVisual.color = scanned ? scannedColor : unscannedColor;
         beaconVisual.enabled = !harvested;
+
+        var visibilityPosition = starMap ? starMap.transform.position : transform.position;
+        var visibilityRadius = starMap ? starMap.radius : 8f;
+        beaconVisual.visibilityPosition = visibilityPosition;
+        beaconVisual.visibilityRadius = visibilityRadius;
     }
 
     private void OnDrawGizmosSelected()

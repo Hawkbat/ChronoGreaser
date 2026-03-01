@@ -1,9 +1,16 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class StarController : MonoBehaviour
+public class StarController : MonoBehaviour, IScannable, IHarvestable
 {
     [SerializeField] float radius;
-    [SerializeField] bool radiusKnown;
+    [SerializeField] bool scanned;
+    [SerializeField] float scanRadius;
+    [SerializeField] string scanName;
+    [SerializeField] string scanMessage;
+    [SerializeField] CargoType cargoType;
+    [SerializeField] List<CargoType> validShields = new();
     [SerializeField] Gradient lifeRimColorCurve;
     [SerializeField] Gradient lifeInnerColorCurve;
     [SerializeField] AnimationCurve lifeSizeCurve;
@@ -31,8 +38,19 @@ public class StarController : MonoBehaviour
     [SerializeField] NebulaVisual nebulaVisual;
     [SerializeField] BlackHoleVisual blackHoleVisual;
 
+    float scannedTime;
     StarMapController starMap;
     SphereCollider col;
+
+    public Vector3 Position => transform.position;
+    public bool Scanned => scanned;
+    public bool CanScan => !scanned;
+    public float ScanRadius => scanRadius;
+    public string ScanName => scanName;
+    public string ScanMessage => scanMessage;
+    public bool CanHarvest => cargoType != CargoType.None && scanned;
+    public float HarvestRadius => scanRadius;
+    public CargoType CargoType => cargoType;
 
     public bool IsAlive => TimeLoop.CurrentTime < startDecayTime;
     public bool IsDecaying => TimeLoop.CurrentTime >= startDecayTime && TimeLoop.CurrentTime < deathTime;
@@ -54,6 +72,20 @@ public class StarController : MonoBehaviour
 
     public float DangerRadius => Mathf.Max(SupernovaRadius, NebulaRadius, BlackHoleRadius);
 
+    public void Scan()
+    {
+        scanned = true;
+        scannedTime = TimeLoop.CurrentTime;
+    }
+
+    public CargoType Harvest()
+    {
+        return cargoType;
+    }
+
+    public bool NeedsShield() => validShields.Count > 0f;
+    public bool HasShields(IEnumerable<CargoType> shieldTypes) => validShields.Count == 0 || (shieldTypes.Any() && shieldTypes.Any(st => validShields.Contains(st)));
+
     void Awake()
     {
         starMap = GetComponentInParent<StarMapController>();
@@ -67,6 +99,11 @@ public class StarController : MonoBehaviour
 
     void Update()
     {
+        if (scanned && TimeLoop.CurrentTime < scannedTime)
+        {
+            scanned = false;
+        }
+
         starVisual.enabled = IsAlive || IsDecaying;
         starVisual.rimColor = RimColor;
         starVisual.innerColor = InnerColor;
@@ -81,7 +118,7 @@ public class StarController : MonoBehaviour
         blackHoleVisual.enabled = IsBlackHole;
         blackHoleVisual.transform.localScale = BlackHoleRadius * Vector3.one;
 
-        radiusVisual.enabled = radiusKnown && DangerRadius > 0f;
+        radiusVisual.enabled = scanned && DangerRadius > 0f;
         radiusVisual.transform.localScale = DangerRadius * Vector3.one;
 
         col.radius = Radius;

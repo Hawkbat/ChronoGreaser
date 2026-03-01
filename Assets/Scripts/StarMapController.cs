@@ -16,6 +16,20 @@ public class StarMapController : MonoBehaviour
     public ShipController GetShip() => ship;
     public IEnumerable<StarController> GetStars() => stars;
     public IEnumerable<ScanBeaconController> GetScanBeacons() => scanBeacons;
+    public IEnumerable<IScannable> GetScannables()
+    {
+        foreach (var star in stars)
+            yield return star;
+        foreach (var scanBeacon in scanBeacons)
+            yield return scanBeacon;
+    }
+    public IEnumerable<IHarvestable> GetHarvestables()
+    {
+        foreach (var star in stars)
+            yield return star;
+        foreach (var scanBeacon in scanBeacons)
+            yield return scanBeacon;
+    }
 
     public void RegisterStar(StarController star)
     {

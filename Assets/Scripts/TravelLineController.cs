@@ -41,7 +41,7 @@ public class TravelLineController : MonoBehaviour
         lineVisual.visibilityPosition = visibilityPosition;
         lineVisual.visibilityRadius = visibilityRadius;
 
-        if (travel.IsInitialized && !travel.IsFuture(TimeLoop.CurrentTime))
+        if (travel.IsInitialized && !travel.IsFuture)
         {
             startVisual.enabled = true;
             endVisual.enabled = true;
@@ -49,7 +49,7 @@ public class TravelLineController : MonoBehaviour
 
             startVisual.color = TimeLoop.CurrentTime > travel.startTime ? pastColor : activeColor;
             endVisual.color = TimeLoop.CurrentTime < travel.endTime ? activeColor : pastColor;
-            lineVisual.color = travel.IsActive(TimeLoop.CurrentTime) ? activeColor : pastColor;
+            lineVisual.color = travel.IsActive ? activeColor : pastColor;
 
             startVisual.transform.localPosition = travel.start;
             endVisual.transform.localPosition = travel.end;
