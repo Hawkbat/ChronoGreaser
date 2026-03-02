@@ -50,6 +50,7 @@ MonoBehaviour:
   masterGroup: {fileID: 24300002, guid: 0873a38142611644393b3c7c7d721588, type: 2}
   musicGroup: {fileID: 1016041555423751996, guid: 0873a38142611644393b3c7c7d721588, type: 2}
   soundsGroup: {fileID: -2801691786577599239, guid: 0873a38142611644393b3c7c7d721588, type: 2}
+  voiceGroup: {fileID: 3422333650700650487, guid: 0873a38142611644393b3c7c7d721588, type: 2}
 --- !u!114 &9038831616824460043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,30 +81,4 @@ MonoBehaviour:
   timeScaleMultiplier: 1
   rewindSpeed: 5
   fastForwardSpeed: 5
-  OnStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  OnResetting:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReset:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRewinding:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRewound:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFastForwarding:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFastForwarded:
-    m_PersistentCalls:
-      m_Calls: []
-  OnResume:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTimeScaleChanged:
-    m_PersistentCalls:
-      m_Calls: []
+  emergencyRewindDuration: 15

@@ -11,7 +11,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] Button creditsButton;
     [SerializeField] Button quitButton;
 
-    private void OnEnable()
+    void OnEnable()
     {
         startButton.onClick.AddListener(OnStartButtonPressed);
         optionsButton.onClick.AddListener(OnOptionsButtonPressed);
@@ -19,7 +19,7 @@ public class MainMenuController : MonoBehaviour
         quitButton.onClick.AddListener(OnQuitButtonPressed);
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         startButton.onClick.RemoveListener(OnStartButtonPressed);
         optionsButton.onClick.RemoveListener(OnOptionsButtonPressed);

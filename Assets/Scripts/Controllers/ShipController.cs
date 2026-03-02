@@ -51,7 +51,6 @@ public class ShipController : MonoBehaviour
         var inBlackHole = IsTraveling() && GetActiveTravel().source != null && GetActiveTravel().source.IsBlackHole;
         TimeLoop.SetTimeScaleMultiplier(inBlackHole ? blackHoleTimeScaleCurve.Evaluate(GetActiveTravel().Progress) : 1f);
 
-
         if (!TimeLoop.IsRewinding)
         {
             foreach (var star in starMap.GetStars())
@@ -79,6 +78,11 @@ public class ShipController : MonoBehaviour
                         break;
                     }
                 }
+            }
+
+            if (IsTraveling() && GetActiveTravel().source != null && GetActiveTravel().source.Remnant.HasShields(injector.ShieldType))
+            {
+                InterruptTravel(true);
             }
         }
     }

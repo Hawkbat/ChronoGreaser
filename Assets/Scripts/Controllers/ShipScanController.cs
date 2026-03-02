@@ -6,6 +6,9 @@ public class ShipScanController : MonoBehaviour
 {
     [SerializeField] float scanDuration;
     [SerializeField] TextMeshProUGUI scanText;
+    [SerializeField] SoundController scanStartVoice;
+    [SerializeField] SoundController scanCompleteVoice;
+    [SerializeField] SoundController scanAbortVoice;
     [SerializeField] StarMapController starMap;
     [SerializeField] ShipController ship;
 
@@ -26,11 +29,19 @@ public class ShipScanController : MonoBehaviour
             isScanning = false;
         }
 
+        if (isScanning && Vector3.Distance(currentScannable.Position, ship.transform.position) > currentScannable.ScanRadius)
+        {
+            currentScannable = null;
+            isScanning = false;
+            if (scanAbortVoice != null) scanAbortVoice.Play();
+        }
+
         if (isScanning && ScanProgress >= 1f)
         {
             currentScannable.Scan();
             currentScannable = null;
             isScanning = false;
+            if (scanCompleteVoice != null) scanCompleteVoice.Play();
         }
 
         var scannables = starMap.GetScannables();
@@ -55,6 +66,7 @@ public class ShipScanController : MonoBehaviour
         currentScannable = nearestScannable;
         isScanning = true;
         scanStartTime = TimeLoop.CurrentTime;
+        if (scanStartVoice != null) scanStartVoice.Play();
         return true;
     }
 }

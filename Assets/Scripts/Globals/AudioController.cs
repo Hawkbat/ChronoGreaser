@@ -21,6 +21,7 @@ public class AudioController : MonoBehaviour
     [SerializeField] AudioMixerGroup masterGroup;
     [SerializeField] AudioMixerGroup musicGroup;
     [SerializeField] AudioMixerGroup soundsGroup;
+    [SerializeField] AudioMixerGroup voiceGroup;
 
     float masterVolumeMultiplier = 1f;
 
@@ -28,6 +29,7 @@ public class AudioController : MonoBehaviour
     public AudioMixerGroup MasterGroup => masterGroup;
     public AudioMixerGroup MusicGroup => musicGroup;
     public AudioMixerGroup SoundsGroup => soundsGroup;
+    public AudioMixerGroup VoiceGroup => voiceGroup;
 
     public void SetMasterVolumeMultiplier(float multiplier)
     {
@@ -52,6 +54,7 @@ public class AudioController : MonoBehaviour
         SetMixerVolume("MasterVolume", Save.Instance.masterVolume * masterVolumeMultiplier);
         SetMixerVolume("MusicVolume", Save.Instance.musicVolume);
         SetMixerVolume("SoundsVolume", Save.Instance.sfxVolume);
+        SetMixerVolume("VoiceVolume", Save.Instance.voiceVolume);
     }
 
     void SetMixerVolume(string parameter, float rawVolume)

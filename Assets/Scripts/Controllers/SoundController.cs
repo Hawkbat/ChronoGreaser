@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundController : MonoBehaviour
 {
-    [SerializeField] bool isMusic = false;
+    [SerializeField] AudioChannel channel = AudioChannel.Sounds;
     [SerializeField] bool muteOnRewind = false;
     [SerializeField] bool muteOnFastForward = false;
 
@@ -12,17 +13,37 @@ public class SoundController : MonoBehaviour
     Stack<SoundTrigger> triggers = new();
     float baseVolume = 1f;
 
+    public bool IsPlaying => audioSource.isPlaying;
+
+    public float Duration => audioSource.clip != null ? audioSource.clip.length : 0f;
+
+    AudioMixerGroup OutputGroup => channel switch
+    {
+        AudioChannel.Music => AudioController.Instance.MusicGroup,
+        AudioChannel.Sounds => AudioController.Instance.SoundsGroup,
+        AudioChannel.Voice => AudioController.Instance.VoiceGroup,
+        _ => AudioController.Instance.MasterGroup,
+    };
+
+    bool ShouldMute => (muteOnRewind && TimeLoop.IsRewinding) || (muteOnFastForward && TimeLoop.IsFastForwarding) || Save.Instance.masterVolume <= 0f || channel switch
+    {
+        AudioChannel.Music => Save.Instance.musicVolume <= 0f,
+        AudioChannel.Sounds => Save.Instance.sfxVolume <= 0f,
+        AudioChannel.Voice => Save.Instance.voiceVolume <= 0f,
+        _ => false,
+    };
+
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        audioSource.outputAudioMixerGroup = isMusic ? AudioController.Instance.MusicGroup : AudioController.Instance.SoundsGroup;
+        audioSource.outputAudioMixerGroup = OutputGroup;
         baseVolume = audioSource.volume;
         triggers = new();
     }
 
     void Update()
     {
-        audioSource.mute = (muteOnRewind && TimeLoop.IsRewinding) || (muteOnFastForward && TimeLoop.IsFastForwarding) || (isMusic && Save.Instance.musicVolume <= 0f) || (!isMusic && Save.Instance.sfxVolume <= 0f);
+        audioSource.mute = ShouldMute;
         audioSource.pitch = TimeLoop.TimeScale;
 
         if (TimeLoop.IsRewinding)
@@ -34,12 +55,11 @@ public class SoundController : MonoBehaviour
                 {
                     audioSource.volume = baseVolume * trigger.volume;
                     audioSource.Play();
+                    audioSource.time = TimeLoop.CurrentTime - trigger.time;
                 }
             }
         }
     }
-
-    public bool IsPlaying() => audioSource.isPlaying;
 
     public void Play(float volume = 1f)
     {
