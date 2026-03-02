@@ -11,6 +11,7 @@ public class Save : ScriptableObject
     public float sfxVolume = 1f;
     public float cameraSensitivityX = 2f;
     public float cameraSensitivityY = 2f;
+    public bool didNormalEnding = false;
     public bool didTimeStopEnding = false;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]

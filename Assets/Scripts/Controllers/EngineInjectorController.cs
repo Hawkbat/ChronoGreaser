@@ -182,10 +182,12 @@ public class EngineInjectorController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         TimeLoop.SetTimeScale(1f);
-        correctSound.Play();
-        FadeController.Instance.StartFade(Color.black, 2f, false);
-        yield return new WaitForSeconds(2f);
         isInjecting = false;
+        correctSound.Play();
+        FadeController.Instance.StartFade(Color.black, 3f, false);
+        yield return new WaitForSeconds(3f);
+        Save.Instance.didNormalEnding = true;
+        Save.SaveFile();
         SceneManager.LoadScene("Startup");
     }
 
@@ -193,10 +195,11 @@ public class EngineInjectorController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         TimeLoop.SetTimeScale(1f);
+        isInjecting = false;
         incorrectSound.Play();
+        yield return new WaitForSeconds(2f);
         FadeController.Instance.StartFade(Color.white, 0.2f, false);
         yield return new WaitForSeconds(2f);
-        isInjecting = false;
         TimeLoop.EmergencyRewind();
     }
 
