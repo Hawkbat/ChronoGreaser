@@ -47,9 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScanBeaconController
   scanned: 0
+  harvested: 0
   scanRadius: 0.5
-  beaconName: 
+  scanName: 
   scanMessage: 
+  cargoType: 0
   beaconVisual: {fileID: 2237724516430021268}
   unscannedColor: {r: 1, g: 0.5, b: 0, a: 1}
   scannedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
@@ -152,7 +154,7 @@ PrefabInstance:
       objectReference: {fileID: 289301614986012343, guid: bb3deeb94563f2b44a81159b7ab0f469, type: 3}
     - target: {fileID: 919132149155446097, guid: c00288adc3d73334ba11c93aa080b01a, type: 3}
       propertyPath: m_Name
-      value: Icosphere
+      value: Icon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -184,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80de42edfbea2f14183c5b932311547d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipVisual
-  billboard: 1
+  billboard: 0
   visibilityPosition: {x: -7, y: 1, z: 0}
   visibilityRadius: 2.8
   color: {r: 1, g: 0.5, b: 0, a: 1}
