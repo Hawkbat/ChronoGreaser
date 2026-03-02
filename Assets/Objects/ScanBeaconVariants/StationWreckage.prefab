@@ -18,9 +18,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanMessage
-      value: Debris from a space station debris which manufactured probes capable
-        of withstanding the tidal forces of <b>black holes</b> using various <b>heavy
-        metals.</b>
+      value: Debris from a space station which manufactured probes for surveying
+        <b>black holes</b> using shielding made from various <b>heavy metals.</b>
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: unscannedColor.b

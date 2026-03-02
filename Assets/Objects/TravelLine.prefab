@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594fa93607bdcc64583147b463d328cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TravelLineController
-  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  activeColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   pastColor: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
   startVisual: {fileID: 3171495232073343157}
   endVisual: {fileID: 3491800420067799475}
