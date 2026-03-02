@@ -46,60 +46,19 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         var timeLoop = TimeLoop.Instance;
-        timeLoop.OnRewinding.AddListener(OnTimeLoopRewinding);
-        timeLoop.OnFastForwarded.AddListener(OnTimeLoopFastForwarded);
     }
 
     void OnDestroy()
     {
         Cursor.lockState = CursorLockMode.None;
-
-        var timeLoop = TimeLoop.Instance;
-        if (timeLoop != null)
-        {
-            timeLoop.OnRewinding.RemoveListener(OnTimeLoopRewinding);
-            timeLoop.OnFastForwarded.RemoveListener(OnTimeLoopFastForwarded);
-        }
     }
-
-#if DEBUG_GUI
-    void OnGUI()
-    {
-        GUILayout.Label($"Time: {TimeLoop.CurrentTime:F2} / {TimeLoop.TotalDuration:F2} (Scale: {TimeLoop.TimeScale:F2})");
-        GUILayout.HorizontalSlider(TimeLoop.NormalizedTime, 0f, 1f, GUILayout.Width(400f));
-        if (TimeLoop.IsResetting)
-        {
-            GUILayout.Label("Resetting...");
-        }
-        else if (TimeLoop.IsStopped)
-        {
-            GUILayout.Label("Stopped");
-        }
-        else if (TimeLoop.IsRewinding)
-        {
-            GUILayout.Label("Rewinding...");
-        }
-        else if (TimeLoop.IsFastForwarding)
-        {
-            GUILayout.Label("Fast Forwarding...");
-        }
-        else
-        {
-            GUILayout.Label("Playing");
-        }
-        GUILayout.Label("Snapshots: " + history.Count);
-        GUILayout.Label("Estimated Memory Usage: " + history.Count * sizeof(float) * 6f / 1024f + " KB");
-        GUILayout.Label("Hover Target: " + (hoverTarget != null ? hoverTarget.ToString() : "None"));
-        GUILayout.Label("Interact Target: " + (interactTarget != null ? interactTarget.ToString() : "None"));
-    }
-#endif
 
     void Update()
     {
         // Emergency reset if player falls out of the world
         if (transform.position.y < -100f)
         {
-            TimeLoop.SetTargetTime(0f);
+            TimeLoop.EmergencyRewind();
         }
 
         if (!TimeLoop.IsPlaying && interactTarget != null)
@@ -131,7 +90,7 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
-        else if (TimeLoop.IsFastForwarding || TimeLoop.IsResetting)
+        else if (TimeLoop.IsFastForwarding)
         {
             ctrl.SimpleMove(Vector3.zero);
             return;
@@ -250,18 +209,6 @@ public class PlayerController : MonoBehaviour
         transform.position = snapshot.Position;
         transform.rotation = Quaternion.Euler(0f, snapshot.angleY, 0f);
         cam.transform.localRotation = Quaternion.Euler(snapshot.cameraAngleX, 0f, 0f);
-    }
-
-    void OnTimeLoopRewinding()
-    {
-        UpdateCurrentSnapshot();
-        RecordSnapshot();
-    }
-
-    void OnTimeLoopFastForwarded()
-    {
-        UpdateCurrentSnapshot();
-        RecordSnapshot();
     }
 
     struct Snapshot

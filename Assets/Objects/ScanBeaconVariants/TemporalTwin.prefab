@@ -18,8 +18,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanMessage
-      value: A copy of this vessel from a parallel universe. Its <b>Superconducting
-        Alloys</b> have lost their useful properties.
+      value: A copy of your vessel from a parallel universe. The <b>Superconducting
+        Alloys</b> from its engine housing have decayed.
       objectReference: {fileID: 0}
     - target: {fileID: 4566857635095339600, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: m_LocalPosition.x

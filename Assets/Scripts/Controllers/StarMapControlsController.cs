@@ -33,7 +33,7 @@ public class StarMapControlsController : MonoBehaviour
         shipYSlider.Locked = ship.IsTraveling();
         if (!ship.IsTraveling())
         {
-            var shipRotationAngles = new Vector3(-shipYSlider.Value * 180f, shipXSlider.Value * 180f, 0f);
+            var shipRotationAngles = new Vector3(-shipYSlider.Value * 90f, shipXSlider.Value * 180f, 0f);
             ship.SetRotation(shipRotationAngles);
         }
     }

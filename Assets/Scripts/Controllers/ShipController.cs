@@ -43,8 +43,7 @@ public class ShipController : MonoBehaviour
             }
             if (!currentTravel.IsActive && currentTravel.source != null)
             {
-                // Death to dangerous star; rewind to start of loop
-                TimeLoop.SetTargetTime(0f);
+                TimeLoop.EmergencyRewind();
             }
         }
 
@@ -75,7 +74,6 @@ public class ShipController : MonoBehaviour
                             var supernovaSpeed = distanceToDangerousStar / supernovaKillDuration;
                             TravelTo(star.transform.localPosition, supernovaSpeed, 0.5f, star);
                             FadeController.Instance.StartFade(Color.white, supernovaKillDuration, fadeIn: false);
-                            Debug.Log("Entered supernova kill radius, initiating forced travel and fade out.");
                         }
                         break;
                     }

@@ -9,8 +9,8 @@ public class Save : ScriptableObject
     public float masterVolume = 1f;
     public float musicVolume = 1f;
     public float sfxVolume = 1f;
-    public float cameraSensitivityX = 1f;
-    public float cameraSensitivityY = 1f;
+    public float cameraSensitivityX = 2f;
+    public float cameraSensitivityY = 2f;
     public bool didTimeStopEnding = false;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]

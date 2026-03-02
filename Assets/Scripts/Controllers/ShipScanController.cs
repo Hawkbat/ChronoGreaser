@@ -44,7 +44,7 @@ public class ShipScanController : MonoBehaviour
             }
         }
 
-        var scanName = nearestScannable != null ? (nearestScannable.Scanned ? nearestScannable.ScanName : "Unidentified") : "No Target";
+        var scanName = nearestScannable != null ? (nearestScannable.Scanned ? nearestScannable.ScanName : "Ready to Scan") : "No Target";
         var scanMessage = nearestScannable != null && nearestScannable.Scanned ? nearestScannable.ScanMessage : "";
         scanText.text = $"Scan Target:\n{scanName}\n{(string.IsNullOrEmpty(scanMessage) ? "" : $"\n{scanMessage}")}{(IsScanning ? $"\n\nScan Progress:\n{Mathf.RoundToInt(ScanProgress * 100)}%" : "")}";
     }

@@ -32,7 +32,7 @@ public class ShipCargoController : MonoBehaviour
         while (cargoCollections.Count > 0 && cargoCollections.Peek().time > TimeLoop.CurrentTime)
         {
             var collection = cargoCollections.Pop();
-            cargo[collection.index] = CargoType.None;
+            cargo[collection.index] = collection.prev;
         }
 
         if (isCollecting && TimeLoop.CurrentTime < collectionStartTime)
@@ -110,11 +110,13 @@ public class ShipCargoController : MonoBehaviour
 
     public void SetCargoAt(int index, CargoType cargoType)
     {
+        var prevType = cargo[index];
         cargo[index] = cargoType;
         cargoCollections.Push(new CargoCollection
         {
             time = TimeLoop.CurrentTime,
-            cargoType = cargoType,
+            prev = prevType,
+            next = cargoType,
             index = index
         });
     }
@@ -129,7 +131,8 @@ public class ShipCargoController : MonoBehaviour
     struct CargoCollection
     {
         public float time;
-        public CargoType cargoType;
+        public CargoType prev;
+        public CargoType next;
         public int index;
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class TimeLoop : MonoBehaviour
@@ -13,23 +12,13 @@ public class TimeLoop : MonoBehaviour
     [SerializeField] float timeScaleMultiplier = 1f;
     [SerializeField] float rewindSpeed = 20f;
     [SerializeField] float fastForwardSpeed = 20f;
+    [SerializeField] float emergencyRewindDuration = 15f;
 
     float elapsedTime = 0f;
     float targetTime = 0f;
     bool isStopped = false;
-    bool isResetting = false;
     bool isRewinding = false;
     bool isFastForwarding = false;
-
-    public UnityEvent OnStopped = new();
-    public UnityEvent OnResetting = new();
-    public UnityEvent OnReset = new();
-    public UnityEvent OnRewinding = new();
-    public UnityEvent OnRewound = new();
-    public UnityEvent OnFastForwarding = new();
-    public UnityEvent OnFastForwarded = new();
-    public UnityEvent OnResume = new();
-    public UnityEvent<float> OnTimeScaleChanged = new();
 
     public static float CurrentTime => instance != null ? instance.elapsedTime : 0f;
     public static float TimeScale
@@ -37,7 +26,7 @@ public class TimeLoop : MonoBehaviour
         get
         {
             if (instance == null) return 1f;
-            if (IsStopped || IsResetting) return 0f;
+            if (IsStopped) return 0f;
             if (IsRewinding) return -instance.rewindSpeed;
             if (IsFastForwarding) return instance.fastForwardSpeed;
             return instance.timeScale * instance.timeScaleMultiplier;
@@ -48,10 +37,9 @@ public class TimeLoop : MonoBehaviour
     public static float TotalDuration => instance != null ? instance.totalDuration : 0f;
     public static float NormalizedTime => instance != null ? Mathf.Clamp01(instance.elapsedTime / instance.totalDuration) : 0f;
     public static bool IsStopped => instance != null ? instance.isStopped : false;
-    public static bool IsResetting => instance != null ? instance.isResetting : false;
     public static bool IsRewinding => instance != null ? instance.isRewinding : false;
     public static bool IsFastForwarding => instance != null ? instance.isFastForwarding : false;
-    public static bool IsPlaying => instance != null ? !instance.isStopped && !instance.isResetting && !instance.isRewinding && !instance.isFastForwarding : false;
+    public static bool IsPlaying => instance != null ? !instance.isStopped && !instance.isRewinding && !instance.isFastForwarding : false;
 
     public static void SetTargetTime(float targetTime)
     {
@@ -65,6 +53,12 @@ public class TimeLoop : MonoBehaviour
         {
             instance.FastForwardToTime(targetTime);
         }
+    }
+
+    public static void EmergencyRewind()
+    {
+        if (instance == null) return;
+        instance.RewindToTime(CurrentTime - instance.emergencyRewindDuration);
     }
 
     public static void SetTimeScale(float newTimeScale)
@@ -131,9 +125,9 @@ public class TimeLoop : MonoBehaviour
         {
             elapsedTime = Mathf.Clamp(elapsedTime + DeltaTime, 0f, totalDuration);
         }
-        if (timeScale > 0f && elapsedTime == totalDuration && !isResetting)
+        if (timeScale > 0f && elapsedTime == totalDuration)
         {
-            ResetTimeLoop();
+            RewindToTime(CurrentTime - emergencyRewindDuration);
         }
         else if (timeScale < 0f && elapsedTime == 0f)
         {
@@ -149,34 +143,17 @@ public class TimeLoop : MonoBehaviour
     {
         if (isStopped) return;
         isStopped = true;
-        OnStopped.Invoke();
         StartCoroutine(DoStoppedTimeLoopEnding());
     }
 
     IEnumerator DoStoppedTimeLoopEnding()
     {
-        AudioController.        Instance.SetMasterVolumeMultiplier(0f);
+        AudioController.Instance.SetMasterVolumeMultiplier(0f);
         yield return new WaitForSeconds(5f);
-        AudioController.        Instance.SetMasterVolumeMultiplier(1f);
+        AudioController.Instance.SetMasterVolumeMultiplier(1f);
         Save.Instance.didTimeStopEnding = true;
         Save.SaveFile();
         SceneManager.LoadScene("Startup");
-    }
-
-    void ResetTimeLoop()
-    {
-        if (isResetting) return;
-        isResetting = true;
-        OnResetting.Invoke();
-        StartCoroutine(DoResetTimeLoop());
-    }
-
-    IEnumerator DoResetTimeLoop()
-    {
-        yield return new WaitForSeconds(1f);
-        isResetting = false;
-        OnReset.Invoke();
-        RewindToTime(0f);
     }
 
     public void ResumeTimeLoop()
@@ -184,7 +161,6 @@ public class TimeLoop : MonoBehaviour
         isStopped = false;
         isRewinding = false;
         isFastForwarding = false;
-        OnResume.Invoke();
     }
 
     public void RewindToTime(float targetTime)
@@ -193,13 +169,11 @@ public class TimeLoop : MonoBehaviour
         ResumeTimeLoop();
         this.targetTime = targetTime;
         isRewinding = true;
-        OnRewinding.Invoke();
     }
 
     void EndRewind()
     {
         isRewinding = false;
-        OnRewound.Invoke();
         ResumeTimeLoop();
     }
 
@@ -209,13 +183,11 @@ public class TimeLoop : MonoBehaviour
         ResumeTimeLoop();
         this.targetTime = targetTime;
         isFastForwarding = true;
-        OnFastForwarding.Invoke();
     }
 
     void EndFastForward()
     {
         isFastForwarding = false;
-        OnFastForwarded.Invoke();
         ResumeTimeLoop();
     }
 }

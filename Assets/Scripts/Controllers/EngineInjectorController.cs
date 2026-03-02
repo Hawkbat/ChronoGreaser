@@ -15,12 +15,26 @@ public class EngineInjectorController : MonoBehaviour
     [SerializeField] SoundController incorrectSound;
 
     bool isInjecting = false;
+    Stack<CargoSnapshot> cargoHistory = new();
 
-    public bool CanInject => TimeLoop.IsPlaying && !isInjecting && currentContents.Count > 0;
+    public bool CanInject => TimeLoop.IsPlaying && !isInjecting && currentContents.Count == correctCombination.Count;
 
     private void Update()
     {
-        var statusText = isInjecting ? "Injecting..." : CanInject ? "Ready" : "Insert Materials";
+        while (cargoHistory.Count > 0 && cargoHistory.Peek().time > TimeLoop.CurrentTime)
+        {
+            var snapshot = cargoHistory.Pop();
+            if (snapshot.added)
+            {
+                currentContents.Remove(snapshot.cargoType);
+            }
+            else
+            {
+                currentContents.Add(snapshot.cargoType);
+            }
+        }
+
+        var statusText = isInjecting ? "Injecting..." : CanInject ? "Ready" : $"Insert Materials ({currentContents.Count}/{correctCombination.Count})";
         var contentsText = currentContents.Count > 0 ? string.Join("\n", currentContents.Select(c => c.GetDisplayName())) : "Empty";
         injectorText.text = $"Injector Status:\n{statusText}\n\nContents:\n{contentsText}";
     }
@@ -35,6 +49,15 @@ public class EngineInjectorController : MonoBehaviour
 
             var correct = currentContents.Count == correctCombination.Count && currentContents.TrueForAll(c => correctCombination.Contains(c));
 
+            foreach (var cargoType in currentContents)
+            {
+                cargoHistory.Push(new CargoSnapshot {
+                    time = TimeLoop.CurrentTime,
+                    cargoType = cargoType,
+                    added = false,
+                });
+            }
+
             currentContents.Clear();
 
             if (correct)
@@ -48,10 +71,16 @@ public class EngineInjectorController : MonoBehaviour
         }
     }
 
-    public void AddCargo(CargoType cargoType)
+    public bool AddCargo(CargoType cargoType)
     {
-        if (cargoType == CargoType.None) return;
+        if (cargoType == CargoType.None || currentContents.Count >= correctCombination.Count) return false;
         currentContents.Add(cargoType);
+        cargoHistory.Push(new CargoSnapshot {
+            time = TimeLoop.CurrentTime,
+            cargoType = cargoType,
+            added = true,
+        });
+        return true;
     }
 
     IEnumerator DoCorrectSequence()
@@ -73,6 +102,13 @@ public class EngineInjectorController : MonoBehaviour
         FadeController.Instance.StartFade(Color.white, 0.2f, false);
         yield return new WaitForSeconds(2f);
         isInjecting = false;
-        TimeLoop.SetTargetTime(0f);
+        TimeLoop.EmergencyRewind();
+    }
+
+    struct CargoSnapshot
+    {
+        public float time;
+        public CargoType cargoType;
+        public bool added;
     }
 }

@@ -18,8 +18,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanMessage
-      value: A stellar scoopcraft for harvesting gas and plasma from <b>supernovas</b>.
-        The shell of its hull is leaking <b>hydrogen</b>.
+      value: A stellar scoopcraft for harvesting gas and plasma from <b>nebulas</b>
+        and <b>supernovas</b>. Its hollow hull plating is leaking <b>hydrogen gas</b>.
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: unscannedColor.b
