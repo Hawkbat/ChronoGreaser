@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Image cursor;
     [SerializeField] Color cursorDefaultColor;
     [SerializeField] Color cursorHoverColor;
+    [SerializeField] Color cursorDisableColor;
 
     InputAction lookAction;
     InputAction moveAction;
@@ -115,8 +116,8 @@ public class PlayerController : MonoBehaviour
 
         if (interactTarget == null || !interactTarget.InteractionLocksCamera())
         {
-            transform.Rotate(Vector3.up, lookInput.x * dt * adjustedLookSpeed.x);
-            cameraAngleX -= lookInput.y * dt * adjustedLookSpeed.y;
+            transform.Rotate(Vector3.up, lookInput.x * TimeLoop.TimeScale * adjustedLookSpeed.x);
+            cameraAngleX -= lookInput.y * TimeLoop.TimeScale * adjustedLookSpeed.y;
             cameraAngleX = Mathf.Clamp(cameraAngleX, -80f, 80f);
             cam.transform.localRotation = Quaternion.Euler(cameraAngleX, 0f, 0f);
         }
@@ -138,7 +139,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out var hitInfo, interactRange, interactableLayer, QueryTriggerInteraction.Collide))
         {
 
-            hoverTarget = hitInfo.collider.GetComponentInParent<IInteractable>();
+            hoverTarget = hitInfo.collider.GetComponent<IInteractable>();
             hoverPos = hitInfo.point;
         }
         else
@@ -174,7 +175,7 @@ public class PlayerController : MonoBehaviour
             interactTarget = null;
         }
 
-        cursor.color = hoverTarget != null ? cursorHoverColor : cursorDefaultColor;
+        cursor.color = hoverTarget != null ? hoverTarget.AllowInteraction() ? cursorHoverColor : cursorDisableColor : cursorDefaultColor;
         cursor.enabled = interactTarget == null;
     }
 
