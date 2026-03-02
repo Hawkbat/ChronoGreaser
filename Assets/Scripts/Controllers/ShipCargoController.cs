@@ -86,16 +86,11 @@ public class ShipCargoController : MonoBehaviour
             };
         }
 
-        cargoText.text = $"Collection Target:\n{collectionTargetText}\n\nCurrent Cargo:";
+        cargoText.text = $"Collection Target:\n{collectionTargetText}\n\nCurrent Cargo:{(IsEmpty ? "\nEmpty" : "")}";
 
         for (int i = 0; i < cargoSlotTexts.Length; i++)
         {
             cargoSlotTexts[i].text = cargo[i] != CargoType.None ? cargo[i].GetDisplayName() : string.Empty;
-        }
-
-        if (IsEmpty)
-        {
-            cargoSlotTexts[0].text = CargoType.None.GetDisplayName();
         }
     }
 
