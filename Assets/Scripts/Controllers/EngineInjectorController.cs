@@ -15,6 +15,9 @@ public class EngineInjectorController : MonoBehaviour
     [SerializeField] SoundController injectSound;
     [SerializeField] SoundController correctSound;
     [SerializeField] SoundController incorrectSound;
+    [SerializeField] SoundController injectShieldStartVoice;
+    [SerializeField] SoundController injectShieldCompleteVoice;
+    [SerializeField] SoundController injectEngineStartVoice;
 
     bool isInjecting = false;
     Stack<CargoSnapshot> cargoHistory = new();
@@ -127,14 +130,10 @@ public class EngineInjectorController : MonoBehaviour
                     added = false,
                 });
                 currentContents.RemoveAt(0);
-                shieldHistory.Push(new ShieldSnapshot
-                {
-                    time = TimeLoop.CurrentTime,
-                    prev = shieldType,
-                    next = cargoType,
-                });
-                shieldType = cargoType;
-                isInjecting = false;
+
+                if (injectShieldStartVoice != null) injectShieldStartVoice.Play();
+
+                StartCoroutine(DoShieldInjection(cargoType));
             }
             else if (mode == InjectorMode.Engine)
             {
@@ -151,6 +150,8 @@ public class EngineInjectorController : MonoBehaviour
                 }
 
                 currentContents.Clear();
+
+                if (injectEngineStartVoice != null) injectEngineStartVoice.Play();
 
                 if (correct)
                 {
@@ -178,6 +179,20 @@ public class EngineInjectorController : MonoBehaviour
         return true;
     }
 
+    IEnumerator DoShieldInjection(CargoType cargoType)
+    {
+        yield return new WaitForSeconds(2f);
+        shieldHistory.Push(new ShieldSnapshot
+        {
+            time = TimeLoop.CurrentTime,
+            prev = shieldType,
+            next = cargoType,
+        });
+        shieldType = cargoType;
+        isInjecting = false;
+        if (injectShieldCompleteVoice != null) injectShieldCompleteVoice.Play();
+    }
+
     IEnumerator DoCorrectSequence()
     {
         yield return new WaitForSeconds(1f);
@@ -188,6 +203,7 @@ public class EngineInjectorController : MonoBehaviour
         yield return new WaitForSeconds(3f);
         Save.Instance.didNormalEnding = true;
         Save.SaveFile();
+        StartupMenuController.openCreditsImmediatelyHack = true;
         SceneManager.LoadScene("Startup");
     }
 

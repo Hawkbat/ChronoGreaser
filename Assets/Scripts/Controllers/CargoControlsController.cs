@@ -19,10 +19,7 @@ public class CargoControlsController : MonoBehaviour
             cargoInjectButtons[i].Locked = shipCargo.GetCargoAt(i) == CargoType.None;
             if (cargoInjectButtons[i].Pressed)
             {
-                if (injector.AddCargo(shipCargo.GetCargoAt(i)))
-                {
-                    shipCargo.RemoveCargoAt(i);
-                }
+                shipCargo.TryTransferToInjector(i);
             }
         }
     }

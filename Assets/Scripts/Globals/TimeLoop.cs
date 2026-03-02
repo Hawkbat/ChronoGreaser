@@ -13,6 +13,8 @@ public class TimeLoop : MonoBehaviour
     [SerializeField] float rewindSpeed = 20f;
     [SerializeField] float fastForwardSpeed = 20f;
     [SerializeField] float emergencyRewindDuration = 15f;
+    [SerializeField] SoundController timeLoopStartVoice;
+    [SerializeField] SoundController timeLoopEndVoice;
 
     float elapsedTime = 0f;
     float targetTime = 0f;
@@ -95,6 +97,11 @@ public class TimeLoop : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        if (timeLoopStartVoice != null) timeLoopStartVoice.Play();
+    }
+
     void OnDestroy()
     {
         if (instance == this)
@@ -137,6 +144,10 @@ public class TimeLoop : MonoBehaviour
         {
             StopTimeLoop();
         }
+        if (timeLoopEndVoice != null)
+        {
+            timeLoopEndVoice.SetPlaying(CurrentTime >= totalDuration - timeLoopEndVoice.Duration);
+        }
     }
 
     void StopTimeLoop()
@@ -153,6 +164,8 @@ public class TimeLoop : MonoBehaviour
         AudioController.Instance.SetMasterVolumeMultiplier(1f);
         Save.Instance.didTimeStopEnding = true;
         Save.SaveFile();
+        StartupMenuController.openCreditsImmediatelyHack = true;
+        StartupMenuController.skipMusicHack = true;
         SceneManager.LoadScene("Startup");
     }
 

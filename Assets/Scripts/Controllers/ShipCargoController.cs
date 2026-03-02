@@ -9,6 +9,11 @@ public class ShipCargoController : MonoBehaviour
     [SerializeField] float collectionDuration;
     [SerializeField] TextMeshProUGUI cargoText;
     [SerializeField] TextMeshProUGUI[] cargoSlotTexts;
+    [SerializeField] SoundController collectionStartVoice;
+    [SerializeField] SoundController collectionCompleteVoice;
+    [SerializeField] SoundController collectionAbortVoice;
+    [SerializeField] SoundController cargoTransferVoice;
+    [SerializeField] EngineInjectorController injector;
     [SerializeField] StarMapController starMap;
     [SerializeField] ShipController ship;
 
@@ -43,6 +48,7 @@ public class ShipCargoController : MonoBehaviour
         {
             currentHarvestable = null;
             isCollecting = false;
+            if (collectionAbortVoice != null) collectionAbortVoice.Play();
         }
 
         if (isCollecting && CollectionProgress >= 1f)
@@ -52,6 +58,7 @@ public class ShipCargoController : MonoBehaviour
             SetCargoAt(emptyIndex, cargoType);
             currentHarvestable = null;
             isCollecting = false;
+            if (collectionCompleteVoice != null) collectionCompleteVoice.Play();
         }
 
         var harvestables = starMap.GetHarvestables();
@@ -98,10 +105,22 @@ public class ShipCargoController : MonoBehaviour
         currentHarvestable = nearestHarvestable;
         isCollecting = true;
         collectionStartTime = TimeLoop.CurrentTime;
+        if (collectionStartVoice != null) collectionStartVoice.Play();
         return true;
     }
 
-    public void SetCargoAt(int index, CargoType cargoType)
+    public bool TryTransferToInjector(int index)
+    {
+        if (injector.AddCargo(GetCargoAt(index)))
+        {
+            RemoveCargoAt(index);
+            if (cargoTransferVoice != null) cargoTransferVoice.Play();
+            return true;
+        }
+        return false;
+    }
+
+    void SetCargoAt(int index, CargoType cargoType)
     {
         var prevType = cargo[index];
         cargo[index] = cargoType;
