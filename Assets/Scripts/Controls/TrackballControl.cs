@@ -4,6 +4,7 @@ using UnityEngine;
 public class TrackballControl : MonoBehaviour, IInteractable
 {
     [SerializeField] Vector2 value;
+    [SerializeField] float sensitivity = 1f;
     [SerializeField] Vector2 rotationScale;
     [SerializeField] Transform ball;
     [SerializeField] float snapshotDebounceTime = 0.1f;
@@ -93,7 +94,7 @@ public class TrackballControl : MonoBehaviour, IInteractable
 
     public void UpdateInteraction(Vector3 worldPos, Vector2 moveDelta)
     {
-        value += moveDelta;
+        value += moveDelta * sensitivity;
     }
 
     public void EndInteraction(Vector3 worldPos)
