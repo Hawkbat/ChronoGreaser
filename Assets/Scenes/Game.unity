@@ -1088,6 +1088,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EngineInjectorControlsController
   activateButton: {fileID: 1909628718}
+  shieldModeButton: {fileID: 1494344217}
+  engineModeButton: {fileID: 1238938636}
   injector: {fileID: 328323994}
 --- !u!1 &164353187
 GameObject:
@@ -1819,6 +1821,8 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1639434047}
+  - {fileID: 1494344216}
+  - {fileID: 1238938635}
   - {fileID: 131690846}
   - {fileID: 505481374}
   - {fileID: 17644138}
@@ -1836,8 +1840,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7439751ece255469961873c75d8017, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EngineInjectorController
+  mode: 0
   currentContents: 
   correctCombination: 0900000008000000
+  shieldType: 0
   injectorText: {fileID: 1639434048}
   injectSound: {fileID: 131690844}
   correctSound: {fileID: 505481375}
@@ -4501,6 +4507,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff934d9495f1c33428995045a0dd174a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonControl
+--- !u!1001 &1238938634
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 328323993}
+    m_Modifications:
+    - target: {fileID: 847176771449920380, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_Name
+      value: Engine Mode Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.492
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.216
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.7512
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203035113251005473, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: pressSound
+      value: 
+      objectReference: {fileID: 1936576270}
+    - target: {fileID: 3203035113251005473, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: releaseSound
+      value: 
+      objectReference: {fileID: 1352198209}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+--- !u!4 &1238938635 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+  m_PrefabInstance: {fileID: 1238938634}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1238938636 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3203035113251005473, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+  m_PrefabInstance: {fileID: 1238938634}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff934d9495f1c33428995045a0dd174a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonControl
 --- !u!1001 &1255984859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5413,7 +5500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4542145108539768040, guid: cacacf55d2e39eb459ce3ca235ed4961, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.261
+      value: -1.218
       objectReference: {fileID: 0}
     - target: {fileID: 4542145108539768040, guid: cacacf55d2e39eb459ce3ca235ed4961, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5421,7 +5508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4542145108539768040, guid: cacacf55d2e39eb459ce3ca235ed4961, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.079
+      value: -4.071
       objectReference: {fileID: 0}
     - target: {fileID: 4542145108539768040, guid: cacacf55d2e39eb459ce3ca235ed4961, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5604,6 +5691,87 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1311963564382979640, guid: fba4e40c2cd6dd54e9dbc9df5029ecea, type: 3}
   m_PrefabInstance: {fileID: 1466288762}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1494344215
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 328323993}
+    m_Modifications:
+    - target: {fileID: 847176771449920380, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_Name
+      value: Shield Mode Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.233
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.216
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.7512
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203035113251005473, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: pressSound
+      value: 
+      objectReference: {fileID: 1936576270}
+    - target: {fileID: 3203035113251005473, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+      propertyPath: releaseSound
+      value: 
+      objectReference: {fileID: 1352198209}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+--- !u!4 &1494344216 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2785633248512984777, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+  m_PrefabInstance: {fileID: 1494344215}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1494344217 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3203035113251005473, guid: 930fbf8f152095243bcf22256152580f, type: 3}
+  m_PrefabInstance: {fileID: 1494344215}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff934d9495f1c33428995045a0dd174a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonControl
 --- !u!114 &1505621161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7447,6 +7615,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   supernovaKillDuration: 10
   shipCargo: {fileID: 170606708}
+  injector: {fileID: 328323994}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

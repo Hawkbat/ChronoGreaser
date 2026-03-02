@@ -22,9 +22,7 @@ public class ShipCargoController : MonoBehaviour
     public bool CanCollect => nearestHarvestable != null && nearestHarvestable.HarvestStatus == HarvestStatus.Ready && !IsCollecting && !ship.IsTraveling();
     public float CollectionProgress => IsCollecting ? Mathf.Clamp01((TimeLoop.CurrentTime - collectionStartTime) / collectionDuration) : 0f;
 
-    public IEnumerable<CargoType> GetCargo() => cargo;
     public CargoType GetCargoAt(int index) => cargo[index];
-    public int CargoCount => cargo.Length;
     public bool IsEmpty => cargo.All(c => c == CargoType.None);
 
     void Update()

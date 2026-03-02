@@ -10,6 +10,7 @@ public class ShipController : MonoBehaviour
     [SerializeField] AnimationCurve blackHoleTimeScaleCurve;
     [SerializeField] float supernovaKillDuration = 10f;
     [SerializeField] ShipCargoController shipCargo;
+    [SerializeField] EngineInjectorController injector;
 
     StarMapController starMap;
     Stack<Travel> travelHistory;
@@ -55,7 +56,7 @@ public class ShipController : MonoBehaviour
         {
             foreach (var star in starMap.GetStars())
             {
-                if (!star.Remnant.NeedsShield() || star.Remnant.HasShields(shipCargo.GetCargo()))
+                if (!star.Remnant.NeedsShield() || star.Remnant.HasShields(injector.ShieldType))
                 {
                     // Shielded from dangerous effects and forced travel
                     continue;

@@ -38,7 +38,7 @@ public abstract class StarRemnantController : MonoBehaviour, IScannable, IHarves
     public CargoType CargoType => cargoType;
 
     public bool NeedsShield() => validShields.Count > 0f;
-    public bool HasShields(IEnumerable<CargoType> shieldTypes) => validShields.Count == 0 || (shieldTypes.Any() && shieldTypes.Any(st => validShields.Contains(st)));
+    public bool HasShields(CargoType shieldType) => validShields.Count == 0 || validShields.Contains(shieldType);
 
     protected virtual void Awake()
     {
