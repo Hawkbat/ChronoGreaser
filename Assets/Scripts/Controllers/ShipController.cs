@@ -42,7 +42,7 @@ public class ShipController : MonoBehaviour
             {
                 transform.localRotation = Quaternion.LookRotation((currentTravel.end - currentTravel.start).normalized, Vector3.up);
             }
-            if (!currentTravel.IsActive && currentTravel.source != null)
+            if (!currentTravel.IsActive && currentTravel.source != null && !currentTravel.source.Remnant.HasShields(injector.ShieldType))
             {
                 TimeLoop.EmergencyRewind();
             }
@@ -55,7 +55,7 @@ public class ShipController : MonoBehaviour
         {
             foreach (var star in starMap.GetStars())
             {
-                if (!star.Remnant.NeedsShield() || star.Remnant.HasShields(injector.ShieldType))
+                if (star.Remnant.HasShields(injector.ShieldType))
                 {
                     // Shielded from dangerous effects and forced travel
                     continue;
