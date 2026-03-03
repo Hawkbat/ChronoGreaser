@@ -14,6 +14,11 @@ public class StartupMenuController : MonoBehaviour
 
     void Awake()
     {
+        Save.LoadFile();
+
+        creditsMenu.stopTimeEnding = Save.Instance.didTimeStopEnding;
+        creditsMenu.normalEnding = Save.Instance.didNormalEnding;
+
         mainMenu.gameObject.SetActive(true);
         optionsMenu.gameObject.SetActive(false);
         creditsMenu.gameObject.SetActive(false);
@@ -24,8 +29,6 @@ public class StartupMenuController : MonoBehaviour
             mainMenu.gameObject.SetActive(false);
             creditsMenu.gameObject.SetActive(true);
         }
-
-        Save.LoadFile();
 
         shouldPlayMusic = Save.Instance.didNormalEnding && !skipMusicHack;
         skipMusicHack = false;
