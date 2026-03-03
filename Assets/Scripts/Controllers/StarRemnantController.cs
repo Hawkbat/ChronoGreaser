@@ -37,7 +37,6 @@ public abstract class StarRemnantController : MonoBehaviour, IScannable, IHarves
         HarvestStatus.Ready;
     public CargoType CargoType => cargoType;
 
-    public bool NeedsShield() => validShields.Count > 0f;
     public bool HasShields(CargoType shieldType) => validShields.Count == 0 || validShields.Contains(shieldType);
 
     protected virtual void Awake()

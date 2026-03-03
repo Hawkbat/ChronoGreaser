@@ -43,7 +43,7 @@ public class TravelLineController : MonoBehaviour
 
         if (travel.IsInitialized && !travel.IsFuture)
         {
-            startVisual.enabled = true;
+            startVisual.enabled = TimeLoop.CurrentTime > travel.startTime;
             endVisual.enabled = true;
             lineVisual.enabled = true;
 

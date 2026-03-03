@@ -10,16 +10,17 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanName
-      value: Abandoned Vessel
+      value: Leaking Scoopcraft
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: cargoType
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: scanMessage
-      value: A stellar scoopcraft for harvesting gas and plasma from <b>supernovas</b>.
-        Its hollow shield plating is leaking trace amounts of <b>hydrogen</b>.
+      value: A damaged stellar scoopcraft for harvesting trace amounts of valuable
+        metals from <b>supernovas</b>. Its hollow shield plating is leaking trace
+        amounts of <b>hydrogen</b>.
       objectReference: {fileID: 0}
     - target: {fileID: 3121542912736995397, guid: dc7cc5908c7aa2a42bedf6dfd63fe9a7, type: 3}
       propertyPath: unscannedColor.b
